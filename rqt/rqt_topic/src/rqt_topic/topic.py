@@ -30,13 +30,13 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import qt_gui.QtBindingHelper #@UnusedImport
+import qt_gui.qt_binding_helper #@UnusedImport
 from QtCore import QObject
 
 import roslib
 roslib.load_manifest('rqt_topic')
 
-from rqt_topic.TopicWidget import TopicWidget
+from .topic_widget import TopicWidget
 
 class Topic(QObject):
 

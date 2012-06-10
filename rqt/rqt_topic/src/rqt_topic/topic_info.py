@@ -34,7 +34,7 @@ from __future__ import division, with_statement
 import time
 from StringIO import StringIO
 
-import qt_gui.QtBindingHelper #@UnusedImport
+import qt_gui.qt_binding_helper #@UnusedImport
 from QtCore import qDebug
 
 import roslib

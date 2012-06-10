@@ -33,14 +33,14 @@
 from __future__ import division
 import os
 
-from qt_gui.QtBindingHelper import loadUi
+from qt_gui.qt_binding_helper import loadUi
 from QtCore import Qt, QTimer, Slot
 from QtGui import QHeaderView, QIcon, QMenu, QTreeWidgetItem, QWidget
 
 import roslib
 roslib.load_manifest('rqt_topic')
 import rospy
-from rqt_topic.TopicInfo import TopicInfo
+from .topic_info import TopicInfo
 
 
 # main class inherits from the ui window class
