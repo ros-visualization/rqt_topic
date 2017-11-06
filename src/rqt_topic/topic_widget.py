@@ -314,10 +314,16 @@ class TopicWidget(QWidget):
 
         # evaluate user action
         if action is action_toggle_auto_resize:
-            if header.resizeMode(0) == QHeaderView.ResizeToContents:
-                header.setResizeMode(QHeaderView.Interactive)
+            try:
+                sectionResizeMode = header.sectionResizeMode  # Qt5
+                setSectionResizeMode = header.setSectionResizeMode  # Qt5
+            except AttributeError:
+                sectionResizeMode = header.resizeMode  # Qt4
+                setSectionResizeMode = header.setResizeMode  # Qt4
+            if sectionResizeMode(0) == QHeaderView.ResizeToContents:
+                setSectionResizeMode(QHeaderView.Interactive)
             else:
-                header.setResizeMode(QHeaderView.ResizeToContents)
+                setSectionResizeMode(QHeaderView.ResizeToContents)
 
     @Slot('QPoint')
     def on_topics_tree_widget_customContextMenuRequested(self, pos):
