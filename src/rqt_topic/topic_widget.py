@@ -217,10 +217,12 @@ class TopicWidget(QWidget):
 
             else:
                 rate_text = ''
+                bytes_per_s = None
                 bandwidth_text = ''
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
             self._tree_items[topic_info._topic_name].setText(self._column_index['rate'], rate_text)
+            self._tree_items[topic_info._topic_name].setData(self._column_index['bandwidth'], Qt.UserRole, bytes_per_s)
             self._tree_items[topic_info._topic_name].setText(self._column_index['bandwidth'], bandwidth_text)
             self._tree_items[topic_info._topic_name].setText(self._column_index['value'], value_text)
 
@@ -386,3 +388,9 @@ class TreeWidgetItem(QTreeWidgetItem):
         super(TreeWidgetItem, self).setData(column, role, value)
         if role == Qt.CheckStateRole and state != self.checkState(column):
             self._check_state_changed_callback(self._topic_name)
+
+    def __lt__(self, other_item):
+        column = self.treeWidget().sortColumn()
+        if column == TopicWidget._column_names.index('bandwidth'):
+            return self.data(column, Qt.UserRole) < other_item.data(column, Qt.UserRole)
+        return super(TreeWidgetItem, self).__lt__(other_item)
