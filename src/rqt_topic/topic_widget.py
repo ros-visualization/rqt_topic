@@ -46,6 +46,7 @@ from .topic_info import TopicInfo
 
 
 class TopicWidget(QWidget):
+
     """
     main class inherits from the ui window class.
 
@@ -84,7 +85,8 @@ class TopicWidget(QWidget):
         except AttributeError:
             setSectionResizeMode = header.setResizeMode  # Qt4
         setSectionResizeMode(QHeaderView.ResizeToContents)
-        header.customContextMenuRequested.connect(self.handle_header_view_customContextMenuRequested)
+        header.customContextMenuRequested.connect(
+            self.handle_header_view_customContextMenuRequested)
         header.setContextMenuPolicy(Qt.CustomContextMenu)
 
         # Whether to get all topics or only the topics that are set in advance.
@@ -122,7 +124,8 @@ class TopicWidget(QWidget):
             if self._selected_topics is None:
                 topic_list = rospy.get_published_topics()
                 if topic_list is None:
-                    rospy.logerr('Not even a single published topic found. Check network configuration')
+                    rospy.logerr(
+                        'Not even a single published topic found. Check network configuration')
                     return
             else:  # Topics to show are specified.
                 topic_list = self._selected_topics
@@ -132,20 +135,25 @@ class TopicWidget(QWidget):
                 rospy.logdebug('refresh_topics) self._selected_topics=%s' % (topic_list,))
 
                 if self._select_topic_type == self.SELECT_BY_NAME:
-                    topic_specifiers_server_all = [name for name, type in rospy.get_published_topics()]
+                    topic_specifiers_server_all = \
+                        [name for name, type in rospy.get_published_topics()]
                     topic_specifiers_required = [name for name, type in topic_list]
                 elif self._select_topic_type == self.SELECT_BY_MSGTYPE:
                     # The topics that are required (by whoever uses this class).
                     topic_specifiers_required = [type for name, type in topic_list]
 
                     # The required topics that match with published topics.
-                    topics_match = [(name, type) for name, type in rospy.get_published_topics() if type in topic_specifiers_required]
+                    topics_match = [(name, type) for name, type in rospy.get_published_topics()
+                                    if type in topic_specifiers_required]
                     topic_list = topics_match
                     rospy.logdebug('selected & published topic types=%s' % (topic_list,))
 
-                rospy.logdebug('server_all=%s\nrequired=%s\ntlist=%s' % (topic_specifiers_server_all, topic_specifiers_required, topic_list))
+                rospy.logdebug('server_all=%s\nrequired=%s\ntlist=%s' %
+                               (topic_specifiers_server_all, topic_specifiers_required, topic_list))
                 if len(topic_list) == 0:
-                    rospy.logerr('None of the following required topics are found.\n(NAME, TYPE): %s' % (self._selected_topics,))
+                    rospy.logerr(
+                        'None of the following required topics are found.\n(NAME, TYPE): %s' %
+                        (self._selected_topics,))
                     return
         except IOError as e:
             rospy.logerr("Communication with rosmaster failed: {0}".format(e.strerror))
@@ -167,11 +175,12 @@ class TopicWidget(QWidget):
                     if topic_info.message_class is not None:
                         message_instance = topic_info.message_class()
                     # add it to the dict and tree view
-                    topic_item = self._recursive_create_widget_items(self.topics_tree_widget, topic_name, topic_type, message_instance)
+                    topic_item = self._recursive_create_widget_items(
+                        self.topics_tree_widget, topic_name, topic_type, message_instance)
                     new_topics[topic_name] = {
-                       'item': topic_item,
-                       'info': topic_info,
-                       'type': topic_type,
+                        'item': topic_item,
+                        'info': topic_info,
+                        'type': topic_type,
                     }
                 else:
                     # if topic has been seen before, copy it to new dict and
@@ -183,7 +192,7 @@ class TopicWidget(QWidget):
             for topic_name in self._topics.keys():
                 self._topics[topic_name]['info'].stop_monitoring()
                 index = self.topics_tree_widget.indexOfTopLevelItem(
-                                           self._topics[topic_name]['item'])
+                    self._topics[topic_name]['item'])
                 self.topics_tree_widget.takeTopLevelItem(index)
                 del self._topics[topic_name]
 
@@ -222,23 +231,31 @@ class TopicWidget(QWidget):
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
             self._tree_items[topic_info._topic_name].setText(self._column_index['rate'], rate_text)
-            self._tree_items[topic_info._topic_name].setData(self._column_index['bandwidth'], Qt.UserRole, bytes_per_s)
-            self._tree_items[topic_info._topic_name].setText(self._column_index['bandwidth'], bandwidth_text)
-            self._tree_items[topic_info._topic_name].setText(self._column_index['value'], value_text)
+            self._tree_items[topic_info._topic_name].setData(
+                self._column_index['bandwidth'], Qt.UserRole, bytes_per_s)
+            self._tree_items[topic_info._topic_name].setText(
+                self._column_index['bandwidth'], bandwidth_text)
+            self._tree_items[topic_info._topic_name].setText(
+                self._column_index['value'], value_text)
 
     def update_value(self, topic_name, message):
         if hasattr(message, '__slots__') and hasattr(message, '_slot_types'):
             for slot_name in message.__slots__:
                 self.update_value(topic_name + '/' + slot_name, getattr(message, slot_name))
 
-        elif type(message) in (list, tuple) and (len(message) > 0) and hasattr(message[0], '__slots__'):
+        elif type(message) in (list, tuple) and \
+                (len(message) > 0) and \
+                hasattr(message[0], '__slots__'):
 
             for index, slot in enumerate(message):
                 if topic_name + '[%d]' % index in self._tree_items:
                     self.update_value(topic_name + '[%d]' % index, slot)
                 else:
-                    base_type_str, _ = self._extract_array_info(self._tree_items[topic_name].text(self._column_index['type']))
-                    self._recursive_create_widget_items(self._tree_items[topic_name], topic_name + '[%d]' % index, base_type_str, slot)
+                    base_type_str, _ = self._extract_array_info(
+                        self._tree_items[topic_name].text(self._column_index['type']))
+                    self._recursive_create_widget_items(
+                        self._tree_items[topic_name],
+                        topic_name + '[%d]' % index, base_type_str, slot)
             # remove obsolete children
             if len(message) < self._tree_items[topic_name].childCount():
                 for i in range(len(message), self._tree_items[topic_name].childCount()):
@@ -276,7 +293,8 @@ class TopicWidget(QWidget):
         self._tree_items[topic_name] = item
         if hasattr(message, '__slots__') and hasattr(message, '_slot_types'):
             for slot_name, type_name in zip(message.__slots__, message._slot_types):
-                self._recursive_create_widget_items(item, topic_name + '/' + slot_name, type_name, getattr(message, slot_name))
+                self._recursive_create_widget_items(
+                    item, topic_name + '/' + slot_name, type_name, getattr(message, slot_name))
 
         else:
             base_type_str, array_size = self._extract_array_info(type_name)
@@ -286,7 +304,8 @@ class TopicWidget(QWidget):
                 base_instance = None
             if array_size is not None and hasattr(base_instance, '__slots__'):
                 for index in range(array_size):
-                    self._recursive_create_widget_items(item, topic_name + '[%d]' % index, base_type_str, base_instance)
+                    self._recursive_create_widget_items(
+                        item, topic_name + '[%d]' % index, base_type_str, base_instance)
         return item
 
     def _toggle_monitoring(self, topic_name):
@@ -359,8 +378,7 @@ class TopicWidget(QWidget):
         @param selected_topics: list of tuple. [(topic_name, topic_type)]
         @type selected_topics: []
         """
-        rospy.logdebug('set_selected_topics topics={}'.format(
-                                                         len(selected_topics)))
+        rospy.logdebug('set_selected_topics topics={}'.format(len(selected_topics)))
         self._selected_topics = selected_topics
 
     # TODO(Enhancement) Save/Restore tree expansion state
@@ -373,6 +391,7 @@ class TopicWidget(QWidget):
             header_state = instance_settings.value('tree_widget_header_state')
             if not self.topics_tree_widget.header().restoreState(header_state):
                 rospy.logwarn("rqt_topic: Failed to restore header state.")
+
 
 class TreeWidgetItem(QTreeWidgetItem):
 

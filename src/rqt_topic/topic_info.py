@@ -79,7 +79,8 @@ class TopicInfo(ROSTopicHz):
         if self.message_class is not None:
             self.monitoring = True
             # FIXME: subscribing to class AnyMsg breaks other subscribers on same node
-            self._subscriber = rospy.Subscriber(self._topic_name, self.message_class, self.message_callback)
+            self._subscriber = rospy.Subscriber(
+                self._topic_name, self.message_class, self.message_callback)
 
     def stop_monitoring(self):
         self.monitoring = False
@@ -93,7 +94,7 @@ class TopicInfo(ROSTopicHz):
             self.timestamps.append(rospy.get_time())
 
             # FIXME: this only works for message of class AnyMsg
-            #self.sizes.append(len(message._buff))
+            # self.sizes.append(len(message._buff))
             # time consuming workaround...
             buff = StringIO()
             message.serialize(buff)
@@ -112,7 +113,7 @@ class TopicInfo(ROSTopicHz):
         current_time = rospy.get_time()
         if current_time <= self.timestamps[0]:
             return None, None, None, None
-            
+
         with self.lock:
             total = sum(self.sizes)
             bytes_per_s = total / (current_time - self.timestamps[0])

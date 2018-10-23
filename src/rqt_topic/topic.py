@@ -45,7 +45,8 @@ class Topic(Plugin):
 
         self._widget.start()
         if context.serial_number() > 1:
-            self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
+            self._widget.setWindowTitle(
+                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
 
     def shutdown_plugin(self):
@@ -56,4 +57,3 @@ class Topic(Plugin):
 
     def restore_settings(self, plugin_settings, instance_settings):
         self._widget.restore_settings(plugin_settings, instance_settings)
-
