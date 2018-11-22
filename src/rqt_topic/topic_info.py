@@ -32,9 +32,9 @@
 
 from __future__ import division, with_statement
 try:
-    from cStringIO import StringIO
+    from cStringIO import StringIO as BufferType
 except ImportError:
-    from io import StringIO
+    from io import BytesIO as BufferType
 
 from python_qt_binding.QtCore import qWarning
 
@@ -96,7 +96,7 @@ class TopicInfo(ROSTopicHz):
             # FIXME: this only works for message of class AnyMsg
             # self.sizes.append(len(message._buff))
             # time consuming workaround...
-            buff = StringIO()
+            buff = BufferType()
             message.serialize(buff)
             self.sizes.append(len(buff.getvalue()))
 
