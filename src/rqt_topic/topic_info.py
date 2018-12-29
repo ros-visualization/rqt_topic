@@ -30,31 +30,32 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import division, with_statement
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+# Determining bandwidth is not supported right now
+# See: https://github.com/ros2/ros2cli/issues/132
+# And: https://github.com/ros2/rclpy/pull/242
+# from io import StringIO
 
 from python_qt_binding.QtCore import qWarning
-
-import roslib
-import rospy
-from rostopic import ROSTopicHz
+from rqt_py_common.message_helpers import get_message_class
+from ros2topic.verb.hz import ROSTopicHz
 
 
 class TopicInfo(ROSTopicHz):
 
-    def __init__(self, topic_name, topic_type):
-        super(TopicInfo, self).__init__(100)
+    def __init__(self, node, spinner, topic_name, topic_type):
+        super(TopicInfo, self).__init__(node, 100)
+        self._node = node
+        self._spinner = spinner
         self._topic_name = topic_name
         self.error = None
         self._subscriber = None
         self.monitoring = False
         self._reset_data()
         self.message_class = None
+        if topic_type is None:
+            self.error = 'No topic types associated with topic: ' % topic_name
         try:
-            self.message_class = roslib.message.get_message_class(topic_type)
+            self.message_class = get_message_class(topic_type)
         except Exception as e:
             self.message_class = None
             qWarning('TopicInfo.__init__(): %s' % (e))
@@ -78,57 +79,59 @@ class TopicInfo(ROSTopicHz):
     def start_monitoring(self):
         if self.message_class is not None:
             self.monitoring = True
-            # FIXME: subscribing to class AnyMsg breaks other subscribers on same node
-            self._subscriber = rospy.Subscriber(
-                self._topic_name, self.message_class, self.message_callback)
+            self._subscriber = self._node.create_subscription(
+                self.message_class, self._topic_name, self.message_callback)
 
     def stop_monitoring(self):
         self.monitoring = False
         self._reset_data()
         if self._subscriber is not None:
-            self._subscriber.unregister()
+            self._spinner.register_listeners_for_destruction(self._subscriber)
+            self._subscriber = None
 
     def message_callback(self, message):
-        ROSTopicHz.callback_hz(self, message)
-        with self.lock:
-            self.timestamps.append(rospy.get_time())
+        self.last_message = message
+        super().callback_hz(message, self._topic_name)
+        return
 
-            # FIXME: this only works for message of class AnyMsg
-            # self.sizes.append(len(message._buff))
-            # time consuming workaround...
-            buff = StringIO()
-            message.serialize(buff)
-            self.sizes.append(len(buff.getvalue()))
-
-            if len(self.timestamps) > self.window_size - 1:
-                self.timestamps.pop(0)
-                self.sizes.pop(0)
-            assert(len(self.timestamps) == len(self.sizes))
-
-            self.last_message = message
+        # TODO(brawner) Bandwidth not supported yet
+        # with self.lock:
+        #     self.timestamps.append(self._clock.now())
+        #
+        #     # FIXME: this only works for message of class AnyMsg
+        #     self.sizes.append(len(message._buff))
+        #     # time consuming workaround...
+        #
+        #     buff = StringIO()
+        #     message.serialize(buff)
+        #     self.sizes.append(len(buff.getvalue()))
+        #
+        #     if len(self.timestamps) > self.window_size - 1:
+        #         self.timestamps.pop(0)
+        #         self.sizes.pop(0)
+        #     assert(len(self.timestamps) == len(self.sizes))
+        #
+        #     self.last_message = message
 
     def get_bw(self):
-        if len(self.timestamps) < 2:
-            return None, None, None, None
-        current_time = rospy.get_time()
-        if current_time <= self.timestamps[0]:
-            return None, None, None, None
+        """
+        Determining bandwith not supported in rclpy currently.
 
-        with self.lock:
-            total = sum(self.sizes)
-            bytes_per_s = total / (current_time - self.timestamps[0])
-            mean_size = total / len(self.timestamps)
-            max_size = max(self.sizes)
-            min_size = min(self.sizes)
-            return bytes_per_s, mean_size, min_size, max_size
-
-    def get_hz(self):
-        if not self.times:
-            return None, None, None, None
-        with self.lock:
-            n = len(self.times)
-            mean = sum(self.times) / n
-            rate = 1. / mean if mean > 0. else 0
-            min_delta = min(self.times)
-            max_delta = max(self.times)
-        return rate, mean, min_delta, max_delta
+        See: https://github.com/ros2/ros2cli/issues/132
+        And: https://github.com/ros2/rclpy/pull/242
+        """
+        return None, None, None, None
+        # TODO (brawner) Bandwidth not supported yet
+        # if len(self.timestamps) < 2:
+        #     return None, None, None, None
+        # current_time = self._clock.now()
+        # if current_time <= self.timestamps[0]:
+        #     return None, None, None, None
+        #
+        # with self.lock:
+        #     total = sum(self.sizes)
+        #     bytes_per_s = total / (current_time - self.timestamps[0])
+        #     mean_size = total / len(self.timestamps)
+        #     max_size = max(self.sizes)
+        #     min_size = min(self.sizes)
+        #     return bytes_per_s, mean_size, min_size, max_size

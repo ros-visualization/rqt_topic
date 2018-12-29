@@ -41,7 +41,7 @@ class Topic(Plugin):
         super(Topic, self).__init__(context)
         self.setObjectName('Topic')
 
-        self._widget = TopicWidget(self)
+        self._widget = TopicWidget(context.node, context.spinner, self)
 
         self._widget.start()
         if context.serial_number() > 1:
