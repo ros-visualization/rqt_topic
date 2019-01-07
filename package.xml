@@ -1,4 +1,4 @@
-<package>
+<package format="2">
   <name>rqt_topic</name>
   <version>0.4.10</version>
   <description>rqt_topic provides a GUI plugin for displaying debug information about ROS topics including publishers, subscribers, publishing rate, and ROS Messages.</description>
@@ -13,17 +13,13 @@
 
   <author>Dorian Scholz</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
-
-  <run_depend>python-rospkg</run_depend>
-  <run_depend version_gte="0.2.19">python_qt_binding</run_depend>
-  <run_depend>rostopic</run_depend>
-  <run_depend>rqt_gui</run_depend>
-  <run_depend>rqt_gui_py</run_depend>
-  <run_depend>std_msgs</run_depend>
+  <exec_depend version_gte="0.2.19">python_qt_binding</exec_depend>
+  <exec_depend>rqt_gui</exec_depend>
+  <exec_depend>rqt_gui_py</exec_depend>
+  <exec_depend>rqt_py_common</exec_depend>
 
   <export>
-    <architecture_independent/>
+    <build_type>ament_python</build_type>
     <rqt_gui plugin="${prefix}/plugin.xml"/>
   </export>
 </package>
