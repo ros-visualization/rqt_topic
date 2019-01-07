@@ -198,7 +198,7 @@ class TopicWidget(QWidget):
                     del self._topics[topic_name]
 
             # clean up old topics
-            for topic_name in self._topics.keys():
+            for topic_name in list(self._topics.keys()):
                 self._topics[topic_name]['info'].stop_monitoring()
                 index = self.topics_tree_widget.indexOfTopLevelItem(
                     self._topics[topic_name]['item'])
