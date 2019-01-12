@@ -194,7 +194,6 @@ class TopicWidget(QWidget):
                 index = self.topics_tree_widget.indexOfTopLevelItem(
                     self._topics[topic_name]['item'])
                 self.topics_tree_widget.takeTopLevelItem(index)
-                del self._topics[topic_name]
 
             # switch to new topic dict
             self._topics = new_topics
