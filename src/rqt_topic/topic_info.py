@@ -42,10 +42,9 @@ from ros2topic.verb.hz import ROSTopicHz
 
 class TopicInfo(ROSTopicHz):
 
-    def __init__(self, node, spinner, topic_name, topic_type):
+    def __init__(self, node, topic_name, topic_type):
         super(TopicInfo, self).__init__(node, 100)
         self._node = node
-        self._spinner = spinner
         self._topic_name = topic_name
         self.error = None
         self._subscriber = None
@@ -86,7 +85,7 @@ class TopicInfo(ROSTopicHz):
         self.monitoring = False
         self._reset_data()
         if self._subscriber is not None:
-            self._spinner.register_listeners_for_destruction(self._subscriber)
+            self._node.destroy_subscription(self._subscriber)
             self._subscriber = None
 
     def message_callback(self, message):
