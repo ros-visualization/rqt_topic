@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2019-03-05)
+------------------
 * removing the spinner from the ros2 port (`#11 <https://github.com/ros-visualization/rqt_topic/issues/11>`_)
 * Merge pull request `#9 <https://github.com/ros-visualization/rqt_topic/issues/9>`_ from ros-visualization/ros2_port
 * Porting to ROS2
