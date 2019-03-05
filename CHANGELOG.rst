@@ -2,6 +2,14 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* removing the spinner from the ros2 port (`#11 <https://github.com/ros-visualization/rqt_topic/issues/11>`_)
+* Merge pull request `#9 <https://github.com/ros-visualization/rqt_topic/issues/9>`_ from ros-visualization/ros2_port
+* Porting to ROS2
+* autopep8 (`#6 <https://github.com/ros-visualization/rqt_topic/issues/6>`_)
+* Contributors: Mike Lautman, Stephen, brawner
+
 0.4.10 (2017-11-16)
 -------------------
 * fix order by bandwidth column (`#4 <https://github.com/ros-visualization/rqt_topic/issues/4>`_)
