@@ -61,7 +61,7 @@ class TopicWidget(QWidget):
 
     _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value']
 
-    def __init__(self, node, spinner, plugin=None, selected_topics=None,
+    def __init__(self, node, plugin=None, selected_topics=None,
                  select_topic_type=SELECT_BY_NAME, topic_timeout=DEFAULT_TOPIC_TIMEOUT_SECONDS):
         """
         @type selected_topics: list of tuples.
@@ -75,7 +75,6 @@ class TopicWidget(QWidget):
         super(TopicWidget, self).__init__()
 
         self._node = node
-        self._spinner = spinner
         self._logger = self._node.get_logger().get_child('rqt_topic.TopicWidget')
         self._select_topic_type = select_topic_type
         self._topic_timeout = topic_timeout
@@ -179,7 +178,7 @@ class TopicWidget(QWidget):
                         qWarning('rqt_topic: Topic "' + topic_name +
                                  '" has more than one type, choosing the first one of type ' +
                                  topic_types[0])
-                    topic_info = TopicInfo(self._node, self._spinner, topic_name, topic_types[0])
+                    topic_info = TopicInfo(self._node, topic_name, topic_types[0])
                     message_instance = None
                     if topic_info.message_class is not None:
                         message_instance = topic_info.message_class()
