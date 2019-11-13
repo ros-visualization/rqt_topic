@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2019-11-13)
+------------------
 * set qos_profile (`#14 <https://github.com/ros-visualization/rqt_topic/issues/14>`_)
 
 1.0.0 (2019-03-05)
