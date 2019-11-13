@@ -79,7 +79,8 @@ class TopicInfo(ROSTopicHz):
         if self.message_class is not None:
             self.monitoring = True
             self._subscriber = self._node.create_subscription(
-                self.message_class, self._topic_name, self.message_callback)
+                self.message_class, self._topic_name, self.message_callback,
+                qos_profile=10)
 
     def stop_monitoring(self):
         self.monitoring = False
