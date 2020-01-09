@@ -2,6 +2,13 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix TypeError in Python 3 (`#7 <https://github.com/ros-visualization/rqt_topic/issues/7>`_)
+* add Python 3 conditional dependencies (`#13 <https://github.com/ros-visualization/rqt_topic/issues/13>`_)
+* fix dictionary changed size during iteration (`#10 <https://github.com/ros-visualization/rqt_topic/issues/10>`_)
+* autopep8 (`#6 <https://github.com/ros-visualization/rqt_topic/issues/6>`_)
+
 0.4.10 (2017-11-16)
 -------------------
 * fix order by bandwidth column (`#4 <https://github.com/ros-visualization/rqt_topic/issues/4>`_)
