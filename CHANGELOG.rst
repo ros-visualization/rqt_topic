@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.11 (2020-01-09)
+-------------------
 * fix TypeError in Python 3 (`#7 <https://github.com/ros-visualization/rqt_topic/issues/7>`_)
 * add Python 3 conditional dependencies (`#13 <https://github.com/ros-visualization/rqt_topic/issues/13>`_)
 * fix dictionary changed size during iteration (`#10 <https://github.com/ros-visualization/rqt_topic/issues/10>`_)
