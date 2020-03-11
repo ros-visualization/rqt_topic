@@ -2,6 +2,10 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* bump CMake minimum version to avoid CMP0048 warning
+
 0.4.11 (2020-01-09)
 -------------------
 * fix TypeError in Python 3 (`#7 <https://github.com/ros-visualization/rqt_topic/issues/7>`_)
