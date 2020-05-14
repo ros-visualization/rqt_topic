@@ -1,18 +1,19 @@
 from setuptools import setup
 
 package_name = 'rqt_topic'
+
 setup(
     name=package_name,
-    version='0.4.9',
-    package_dir={'': 'src'},
+    version='1.1.0',
     packages=[package_name],
+    package_dir={'': 'src'},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
-        ('share/' + package_name + '/resource', ['resource/TopicWidget.ui']),
+        ('share/' + package_name + '/resource',
+            ['resource/TopicWidget.ui']),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name, ['plugin.xml']),
-        ('lib/' + package_name, ['scripts/rqt_topic'])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -22,14 +23,17 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
     description=(
-        'rqt_topic provides a GUI plugin for displaying debug information about ROS topics '
-        'including publishers, subscribers, publishing rate, and ROS Messages.'
+        'RQT plugin for monitoring ROS processes.'
     ),
     license='BSD',
-    scripts=['scripts/rqt_topic'],
+    entry_points={
+        'console_scripts': [
+            'rqt_topic = ' + package_name + '.main:main',
+        ],
+    },
 )
