@@ -1,12 +1,11 @@
 from setuptools import setup
 
 package_name = 'rqt_topic'
-
 setup(
     name=package_name,
-    version='1.1.0',
-    packages=[package_name],
+    version='0.4.9',
     package_dir={'': 'src'},
+    packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -23,12 +22,13 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
     description=(
-        'RQT plugin for monitoring ROS processes.'
+        'rqt_topic provides a GUI plugin for displaying debug information about ROS topics '
+        'including publishers, subscribers, publishing rate, and ROS Messages.'
     ),
     license='BSD',
     entry_points={
