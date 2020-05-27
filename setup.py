@@ -3,7 +3,7 @@ from setuptools import setup
 package_name = 'rqt_topic'
 setup(
     name=package_name,
-    version='0.4.9',
+    version='1.1.0',
     package_dir={'': 'src'},
     packages=[package_name],
     data_files=[
@@ -22,7 +22,7 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
