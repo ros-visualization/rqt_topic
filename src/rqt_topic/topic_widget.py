@@ -277,7 +277,7 @@ class TopicWidget(QWidget):
                         self._tree_items[topic_name].text(self._column_index['type']))
                     self._recursive_create_widget_items(
                         self._tree_items[topic_name],
-                        topic_name + '[%d]' % index, base_type_str, slot)
+                        topic_name + '[%d]' % index, [base_type_str], slot)
             # remove obsolete children
             if len(message) < self._tree_items[topic_name].childCount():
                 for i in range(len(message), self._tree_items[topic_name].childCount()):
@@ -296,6 +296,8 @@ class TopicWidget(QWidget):
                 array_size = int(array_size_str)
             else:
                 array_size = 0
+        elif type_str.startswith('sequence<') and type_str.endswith('>'):
+            type_str = type_str[9:-1]
 
         return type_str, array_size
 
