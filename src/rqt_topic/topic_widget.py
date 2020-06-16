@@ -286,6 +286,7 @@ class TopicWidget(QWidget):
         else:
             if topic_name in self._tree_items:
                 self._tree_items[topic_name].setText(self._column_index['value'], repr(message))
+                self._tree_items[topic_name].setData(self._column_index['value'], Qt.UserRole, message)
 
     def _extract_array_info(self, type_str):
         array_size = None
@@ -310,7 +311,7 @@ class TopicWidget(QWidget):
             topic_text = topic_name.split('/')[-1]
             if '[' in topic_text:
                 topic_text = topic_text[topic_text.index('['):]
-            item = QTreeWidgetItem(parent)
+            item = TreeWidgetItem2(parent)
         item.setText(self._column_index['topic'], topic_text)
         item.setText(self._column_index['type'], ", ".join(type_names))
         item.setData(0, Qt.UserRole, topic_name)
@@ -437,3 +438,21 @@ class TreeWidgetItem(QTreeWidgetItem):
         if column == TopicWidget._column_names.index('bandwidth'):
             return self.data(column, Qt.UserRole) < other_item.data(column, Qt.UserRole)
         return super(TreeWidgetItem, self).__lt__(other_item)
+
+
+class TreeWidgetItem2(QTreeWidgetItem):
+
+    def __init__(self, parent=None):
+        super(TreeWidgetItem2, self).__init__(parent)
+
+    def __lt__(self, other_item):
+        column = self.treeWidget().sortColumn()
+        if column == TopicWidget._column_names.index('value'):
+            # use non-string values if comparable
+            lhs = self.data(column, Qt.UserRole)
+            rhs = other_item.data(column, Qt.UserRole)
+            try:
+                return lhs < rhs
+            except TypeError:
+                pass
+        return super(TreeWidgetItem2, self).__lt__(other_item)
