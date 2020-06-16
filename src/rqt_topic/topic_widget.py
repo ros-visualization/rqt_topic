@@ -59,7 +59,7 @@ class TopicWidget(QWidget):
 
     DEFAULT_TOPIC_TIMEOUT_SECONDS = 10.0
 
-    _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value']
+    _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value', '_msg_order']
 
     def __init__(self, node, plugin=None, selected_topics=None,
                  select_topic_type=SELECT_BY_NAME, topic_timeout=DEFAULT_TOPIC_TIMEOUT_SECONDS):
@@ -83,7 +83,8 @@ class TopicWidget(QWidget):
         ui_file = os.path.join(package_path, 'share', 'rqt_topic', 'resource', 'TopicWidget.ui')
         loadUi(ui_file, self)
         self._plugin = plugin
-        self.topics_tree_widget.sortByColumn(0, Qt.AscendingOrder)
+        self.topics_tree_widget.sortByColumn(
+            self._column_names.index('_msg_order'), Qt.AscendingOrder)
         header = self.topics_tree_widget.header()
         try:
             setSectionResizeMode = header.setSectionResizeMode  # Qt5
@@ -104,6 +105,7 @@ class TopicWidget(QWidget):
         self._column_index = {}
         for column_name in self._column_names:
             self._column_index[column_name] = len(self._column_index)
+        self.topics_tree_widget.setColumnHidden(self._column_index['_msg_order'], True)
 
         # self.refresh_topics()
 
@@ -275,9 +277,10 @@ class TopicWidget(QWidget):
                 else:
                     base_type_str, _ = self._extract_array_info(
                         self._tree_items[topic_name].text(self._column_index['type']))
-                    self._recursive_create_widget_items(
+                    i = self._recursive_create_widget_items(
                         self._tree_items[topic_name],
                         topic_name + '[%d]' % index, [base_type_str], slot)
+                    i.setText(self._column_index['_msg_order'], str(index))
             # remove obsolete children
             if len(message) < self._tree_items[topic_name].childCount():
                 for i in range(len(message), self._tree_items[topic_name].childCount()):
@@ -316,9 +319,12 @@ class TopicWidget(QWidget):
         item.setData(0, Qt.UserRole, topic_name)
         self._tree_items[topic_name] = item
         if hasattr(message, 'get_fields_and_field_types'):
-            for slot_name, type_name in message.get_fields_and_field_types().items():
-                self._recursive_create_widget_items(
+            fields_and_field_types = message.get_fields_and_field_types()
+            for index, slot_name in enumerate(fields_and_field_types.keys()):
+                type_name = fields_and_field_types[slot_name]
+                i = self._recursive_create_widget_items(
                     item, topic_name + '/' + slot_name, [type_name], getattr(message, slot_name))
+                i.setText(self._column_index['_msg_order'], str(index))
 
         elif not type_names:
             base_type_str, array_size = self._extract_array_info(type_names[0])
@@ -328,8 +334,9 @@ class TopicWidget(QWidget):
                 base_instance = None
             if array_size is not None and hasattr(base_instance, '__slots__'):
                 for index in range(array_size):
-                    self._recursive_create_widget_items(
+                    i = self._recursive_create_widget_items(
                         item, topic_name + '[%d]' % index, base_type_str, base_instance)
+                    i.setText(self._column_index['_msg_order'], str(index))
         return item
 
     def _toggle_monitoring(self, topic_name):
@@ -355,6 +362,9 @@ class TopicWidget(QWidget):
         # show context menu
         menu = QMenu(self)
         action_toggle_auto_resize = menu.addAction('Toggle Auto-Resize')
+        action_restore_message_order = None
+        if self.topics_tree_widget.sortColumn() not in (-1, self._column_index['_msg_order']):
+            action_restore_message_order = menu.addAction('Restore message order')
         action = menu.exec_(header.mapToGlobal(pos))
 
         # evaluate user action
@@ -369,6 +379,9 @@ class TopicWidget(QWidget):
                 setSectionResizeMode(QHeaderView.Interactive)
             else:
                 setSectionResizeMode(QHeaderView.ResizeToContents)
+        if action is action_restore_message_order:
+            self.topics_tree_widget.sortByColumn(
+                self._column_index['_msg_order'], Qt.AscendingOrder)
 
     @Slot('QPoint')
     def on_topics_tree_widget_customContextMenuRequested(self, pos):
