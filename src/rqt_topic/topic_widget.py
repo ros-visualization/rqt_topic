@@ -36,7 +36,7 @@ import os
 
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-from python_qt_binding.QtCore import Qt, QTimer, qWarning, Signal, Slot
+from python_qt_binding.QtCore import Qt, QTimer, qWarning, Slot
 from python_qt_binding.QtGui import QIcon
 from python_qt_binding.QtWidgets import QHeaderView, QMenu, QTreeWidgetItem, QWidget
 from rqt_py_common.message_helpers import get_message_class
@@ -250,7 +250,7 @@ class TopicWidget(QWidget):
 
             else:
                 rate_text = ''
-                bytes_per_s = None
+                # bytes_per_s = None
                 bandwidth_text = ''
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
@@ -289,7 +289,8 @@ class TopicWidget(QWidget):
         else:
             if topic_name in self._tree_items:
                 self._tree_items[topic_name].setText(self._column_index['value'], repr(message))
-                self._tree_items[topic_name].setData(self._column_index['value'], Qt.UserRole, message)
+                self._tree_items[topic_name].setData(self._column_index['value'],
+                                                     Qt.UserRole, message)
 
     def _extract_array_info(self, type_str):
         array_size = None
