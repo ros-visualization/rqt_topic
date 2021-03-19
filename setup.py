@@ -12,7 +12,6 @@ setup(
         ('share/' + package_name + '/resource', ['resource/TopicWidget.ui']),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name, ['plugin.xml']),
-        ('lib/' + package_name, ['scripts/rqt_topic'])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -32,5 +31,9 @@ setup(
     ),
     license='BSD',
     tests_require=['pytest'],
-    scripts=['scripts/rqt_topic'],
+    entry_points={
+        'console_scripts': [
+            'rqt_topic = ' + package_name + '.main:main',
+        ],
+    },
 )
