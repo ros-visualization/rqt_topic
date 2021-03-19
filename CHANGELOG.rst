@@ -2,6 +2,17 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2021-03-19)
+------------------
+* Created an entry-point for rqt_topic in setup.py (`#16 <https://github.com/ros-visualization/rqt_topic/issues/16>`_)
+* Fix flake8 errors and add linter tests (`#28 <https://github.com/ros-visualization/rqt_topic/issues/28>`_)
+* Update Open Robotics Maintainer (`#26 <https://github.com/ros-visualization/rqt_topic/issues/26>`_)
+* Use raw / non-string value for ordering (`#23 <https://github.com/ros-visualization/rqt_topic/issues/23>`_)
+* Support order fields as defined in message (`#22 <https://github.com/ros-visualization/rqt_topic/issues/22>`_)
+* Fix the type cell value for sequence items (`#21 <https://github.com/ros-visualization/rqt_topic/issues/21>`_)
+* Updated version package and license in setup.py (`#17 <https://github.com/ros-visualization/rqt_topic/issues/17>`_)
+* Contributors: Alejandro Hernández Cordero, Dirk Thomas, Scott K Logan
+
 1.1.0 (2019-11-13)
 ------------------
 * set qos_profile (`#14 <https://github.com/ros-visualization/rqt_topic/issues/14>`_)
