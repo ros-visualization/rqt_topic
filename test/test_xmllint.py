@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from ament_xmllint.main import main
-
 import pytest
 
 
