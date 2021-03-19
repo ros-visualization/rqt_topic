@@ -36,7 +36,7 @@ import os
 
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-from python_qt_binding.QtCore import Qt, QTimer, qWarning, Signal, Slot
+from python_qt_binding.QtCore import Qt, QTimer, qWarning, Slot
 from python_qt_binding.QtGui import QIcon
 from python_qt_binding.QtWidgets import QHeaderView, QMenu, QTreeWidgetItem, QWidget
 from rqt_py_common.message_helpers import get_message_class
@@ -59,7 +59,7 @@ class TopicWidget(QWidget):
 
     DEFAULT_TOPIC_TIMEOUT_SECONDS = 10.0
 
-    _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value']
+    _column_names = ['topic', 'type', 'bandwidth', 'rate', 'value', '_msg_order']
 
     def __init__(self, node, plugin=None, selected_topics=None,
                  select_topic_type=SELECT_BY_NAME, topic_timeout=DEFAULT_TOPIC_TIMEOUT_SECONDS):
@@ -83,7 +83,8 @@ class TopicWidget(QWidget):
         ui_file = os.path.join(package_path, 'share', 'rqt_topic', 'resource', 'TopicWidget.ui')
         loadUi(ui_file, self)
         self._plugin = plugin
-        self.topics_tree_widget.sortByColumn(0, Qt.AscendingOrder)
+        self.topics_tree_widget.sortByColumn(
+            self._column_names.index('_msg_order'), Qt.AscendingOrder)
         header = self.topics_tree_widget.header()
         try:
             setSectionResizeMode = header.setSectionResizeMode  # Qt5
@@ -104,6 +105,7 @@ class TopicWidget(QWidget):
         self._column_index = {}
         for column_name in self._column_names:
             self._column_index[column_name] = len(self._column_index)
+        self.topics_tree_widget.setColumnHidden(self._column_index['_msg_order'], True)
 
         # self.refresh_topics()
 
@@ -248,7 +250,7 @@ class TopicWidget(QWidget):
 
             else:
                 rate_text = ''
-                bytes_per_s = None
+                # bytes_per_s = None
                 bandwidth_text = ''
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
@@ -275,9 +277,10 @@ class TopicWidget(QWidget):
                 else:
                     base_type_str, _ = self._extract_array_info(
                         self._tree_items[topic_name].text(self._column_index['type']))
-                    self._recursive_create_widget_items(
+                    i = self._recursive_create_widget_items(
                         self._tree_items[topic_name],
-                        topic_name + '[%d]' % index, base_type_str, slot)
+                        topic_name + '[%d]' % index, [base_type_str], slot)
+                    i.setText(self._column_index['_msg_order'], str(index))
             # remove obsolete children
             if len(message) < self._tree_items[topic_name].childCount():
                 for i in range(len(message), self._tree_items[topic_name].childCount()):
@@ -286,6 +289,8 @@ class TopicWidget(QWidget):
         else:
             if topic_name in self._tree_items:
                 self._tree_items[topic_name].setText(self._column_index['value'], repr(message))
+                self._tree_items[topic_name].setData(self._column_index['value'],
+                                                     Qt.UserRole, message)
 
     def _extract_array_info(self, type_str):
         array_size = None
@@ -296,6 +301,8 @@ class TopicWidget(QWidget):
                 array_size = int(array_size_str)
             else:
                 array_size = 0
+        elif type_str.startswith('sequence<') and type_str.endswith('>'):
+            type_str = type_str[9:-1]
 
         return type_str, array_size
 
@@ -308,15 +315,18 @@ class TopicWidget(QWidget):
             topic_text = topic_name.split('/')[-1]
             if '[' in topic_text:
                 topic_text = topic_text[topic_text.index('['):]
-            item = QTreeWidgetItem(parent)
+            item = TreeWidgetItem2(parent)
         item.setText(self._column_index['topic'], topic_text)
         item.setText(self._column_index['type'], ", ".join(type_names))
         item.setData(0, Qt.UserRole, topic_name)
         self._tree_items[topic_name] = item
         if hasattr(message, 'get_fields_and_field_types'):
-            for slot_name, type_name in message.get_fields_and_field_types().items():
-                self._recursive_create_widget_items(
+            fields_and_field_types = message.get_fields_and_field_types()
+            for index, slot_name in enumerate(fields_and_field_types.keys()):
+                type_name = fields_and_field_types[slot_name]
+                i = self._recursive_create_widget_items(
                     item, topic_name + '/' + slot_name, [type_name], getattr(message, slot_name))
+                i.setText(self._column_index['_msg_order'], str(index))
 
         elif not type_names:
             base_type_str, array_size = self._extract_array_info(type_names[0])
@@ -326,8 +336,9 @@ class TopicWidget(QWidget):
                 base_instance = None
             if array_size is not None and hasattr(base_instance, '__slots__'):
                 for index in range(array_size):
-                    self._recursive_create_widget_items(
+                    i = self._recursive_create_widget_items(
                         item, topic_name + '[%d]' % index, base_type_str, base_instance)
+                    i.setText(self._column_index['_msg_order'], str(index))
         return item
 
     def _toggle_monitoring(self, topic_name):
@@ -353,6 +364,9 @@ class TopicWidget(QWidget):
         # show context menu
         menu = QMenu(self)
         action_toggle_auto_resize = menu.addAction('Toggle Auto-Resize')
+        action_restore_message_order = None
+        if self.topics_tree_widget.sortColumn() not in (-1, self._column_index['_msg_order']):
+            action_restore_message_order = menu.addAction('Restore message order')
         action = menu.exec_(header.mapToGlobal(pos))
 
         # evaluate user action
@@ -367,6 +381,9 @@ class TopicWidget(QWidget):
                 setSectionResizeMode(QHeaderView.Interactive)
             else:
                 setSectionResizeMode(QHeaderView.ResizeToContents)
+        if action is action_restore_message_order:
+            self.topics_tree_widget.sortByColumn(
+                self._column_index['_msg_order'], Qt.AscendingOrder)
 
     @Slot('QPoint')
     def on_topics_tree_widget_customContextMenuRequested(self, pos):
@@ -435,3 +452,21 @@ class TreeWidgetItem(QTreeWidgetItem):
         if column == TopicWidget._column_names.index('bandwidth'):
             return self.data(column, Qt.UserRole) < other_item.data(column, Qt.UserRole)
         return super(TreeWidgetItem, self).__lt__(other_item)
+
+
+class TreeWidgetItem2(QTreeWidgetItem):
+
+    def __init__(self, parent=None):
+        super(TreeWidgetItem2, self).__init__(parent)
+
+    def __lt__(self, other_item):
+        column = self.treeWidget().sortColumn()
+        if column == TopicWidget._column_names.index('value'):
+            # use non-string values if comparable
+            lhs = self.data(column, Qt.UserRole)
+            rhs = other_item.data(column, Qt.UserRole)
+            try:
+                return lhs < rhs
+            except TypeError:
+                pass
+        return super(TreeWidgetItem2, self).__lt__(other_item)
