@@ -31,5 +31,6 @@ setup(
         'including publishers, subscribers, publishing rate, and ROS Messages.'
     ),
     license='BSD',
+    tests_require=['pytest'],
     scripts=['scripts/rqt_topic'],
 )
