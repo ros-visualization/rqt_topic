@@ -31,6 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from __future__ import division
+
 import itertools
 import os
 
@@ -45,7 +46,6 @@ from .topic_info import TopicInfo
 
 
 class TopicWidget(QWidget):
-
     """
     main class inherits from the ui window class.
 
@@ -64,6 +64,8 @@ class TopicWidget(QWidget):
     def __init__(self, node, plugin=None, selected_topics=None,
                  select_topic_type=SELECT_BY_NAME, topic_timeout=DEFAULT_TOPIC_TIMEOUT_SECONDS):
         """
+        Initialize the TopicWidget class.
+
         @type selected_topics: list of tuples.
         @param selected_topics: [($NAME_TOPIC$, $TYPE_TOPIC$), ...]
         @type select_topic_type: int
@@ -117,16 +119,12 @@ class TopicWidget(QWidget):
         self._select_topic_type = specifier
 
     def start(self):
-        """
-        This method needs to be called to start updating topic pane.
-        """
+        """Call this method to start updating the topic pane."""
         self._timer_refresh_topics.start(1000)
 
     @Slot()
     def refresh_topics(self):
-        """
-        refresh tree view items
-        """
+        """Refresh tree view items."""
         if self._selected_topics is None:
             topic_list = self._node.get_topic_names_and_types()
             if topic_list is None:
@@ -317,7 +315,7 @@ class TopicWidget(QWidget):
                 topic_text = topic_text[topic_text.index('['):]
             item = TreeWidgetItem2(parent)
         item.setText(self._column_index['topic'], topic_text)
-        item.setText(self._column_index['type'], ", ".join(type_names))
+        item.setText(self._column_index['type'], ', '.join(type_names))
         item.setData(0, Qt.UserRole, topic_name)
         self._tree_items[topic_name] = item
         if hasattr(message, 'get_fields_and_field_types'):
@@ -414,6 +412,8 @@ class TopicWidget(QWidget):
 
     def set_selected_topics(self, selected_topics):
         """
+        Set selected topics.
+
         @param selected_topics: list of tuple. [(topic_name, topic_type)]
         @type selected_topics: []
         """
@@ -429,7 +429,7 @@ class TopicWidget(QWidget):
         if instance_settings.contains('tree_widget_header_state'):
             header_state = instance_settings.value('tree_widget_header_state')
             if not self.topics_tree_widget.header().restoreState(header_state):
-                self._logger.warn("rqt_topic: Failed to restore header state.")
+                self._logger.warn('rqt_topic: Failed to restore header state.')
 
 
 class TreeWidgetItem(QTreeWidgetItem):
