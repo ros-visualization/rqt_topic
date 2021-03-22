@@ -36,8 +36,8 @@
 # from io import StringIO
 
 from python_qt_binding.QtCore import qWarning
-from rqt_py_common.message_helpers import get_message_class
 from ros2topic.verb.hz import ROSTopicHz
+from rqt_py_common.message_helpers import get_message_class
 
 
 class TopicInfo(ROSTopicHz):
@@ -118,14 +118,10 @@ class TopicInfo(ROSTopicHz):
         #     self.last_message = message
 
     def get_bw(self):
-        """
-        Determining bandwith not supported in rclpy currently.
-
-        See: https://github.com/ros2/ros2cli/issues/132
-        And: https://github.com/ros2/rclpy/pull/242
-        """
         return None, None, None, None
-        # TODO (brawner) Bandwidth not supported yet
+        # TODO (brawner) Bandwidth not supported in rclpy yet.
+        # See: https://github.com/ros2/ros2cli/issues/132
+        # And: https://github.com/ros2/rclpy/pull/242
         # if len(self.timestamps) < 2:
         #     return None, None, None, None
         # current_time = self._clock.now()
