@@ -40,7 +40,10 @@ from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, QTimer, qWarning, Slot
 from python_qt_binding.QtGui import QIcon
 from python_qt_binding.QtWidgets import QHeaderView, QMenu, QTreeWidgetItem, QWidget
+from rqt_gui_py.rclpy_spinner import RclpySpinner
 from rqt_py_common.message_helpers import get_message_class
+
+import rclpy
 
 from .topic_info import TopicInfo
 
@@ -115,6 +118,12 @@ class TopicWidget(QWidget):
         self._timer_refresh_topics = QTimer(self)
         self._timer_refresh_topics.timeout.connect(self.refresh_topics)
 
+        # Create a ROS node to handle the subscriptions
+        self._local_node = rclpy.create_node('rqt_topic_plugin_%d' % os.getpid(),
+                                             start_parameter_services=False)
+        self._spinner = RclpySpinner(self._local_node)
+        self._spinner.start()
+
     def set_topic_specifier(self, specifier):
         self._select_topic_type = specifier
 
@@ -178,7 +187,7 @@ class TopicWidget(QWidget):
                         qWarning('rqt_topic: Topic "' + topic_name +
                                  '" has more than one type, choosing the first one of type ' +
                                  topic_types[0])
-                    topic_info = TopicInfo(self._node, topic_name, topic_types[0])
+                    topic_info = TopicInfo(self._local_node, topic_name, topic_types[0])
                     message_instance = None
                     if topic_info.message_class is not None:
                         message_instance = topic_info.message_class()
@@ -406,9 +415,11 @@ class TopicWidget(QWidget):
             recursive_set_expanded(item)
 
     def shutdown_plugin(self):
-        for topic in self._topics.values():
-            topic['info'].stop_monitoring()
         self._timer_refresh_topics.stop()
+        self._spinner.quit()
+        self._spinner.wait(msecs=2000)  # Wait for the _spinner (a QThread) to finish
+        self._local_node.destroy_node()
+
 
     def set_selected_topics(self, selected_topics):
         """
