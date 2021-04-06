@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.1 (2021-04-06)
+------------------
 * Add pytest.ini to silence warnings when running locally.
 * Fix warnings pointed out by flake8.
 * Contributors: Chris Lalancette
