@@ -2,6 +2,12 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add pytest.ini to silence warnings when running locally.
+* Fix warnings pointed out by flake8.
+* Contributors: Chris Lalancette
+
 1.2.0 (2021-03-19)
 ------------------
 * Created an entry-point for rqt_topic in setup.py (`#16 <https://github.com/ros-visualization/rqt_topic/issues/16>`_)
