@@ -86,10 +86,6 @@ class TopicInfo(ROSTopicHz):
         self.monitoring = False
         self._reset_data()
         if self._subscriber is not None:
-            qWarning('TopicInfo.stop_monitoring(): '
-                     'Unsubscribing from a topic while the executor is spinning may segfault. '
-                     'This is a known bug in rclpy and is being addressed')
-            qWarning('TopicInfo.stop_monitoring(): See: https://github.com/ros2/rclpy/issues/255')
             self._node.destroy_subscription(self._subscriber)
             self._subscriber = None
 
