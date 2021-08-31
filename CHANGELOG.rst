@@ -2,6 +2,12 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.2 (2021-08-31)
+------------------
+* Fix modern setuptools warning about dashes instead of underscores (`#34 <https://github.com/ros-visualization/rqt_topic/issues/34>`_)
+* Remove obsolete warnings (`#31 <https://github.com/ros-visualization/rqt_topic/issues/31>`_)
+* Contributors: Chris Lalancette, Michael Jeronimo
+
 1.2.1 (2021-04-06)
 ------------------
 * Add pytest.ini to silence warnings when running locally.
