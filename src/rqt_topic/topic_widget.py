@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Copyright (c) 2011, Dorian Scholz, TU Darmstadt
 # All rights reserved.
 #
@@ -29,8 +27,6 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-from __future__ import division
 
 import itertools
 import os
@@ -101,15 +97,12 @@ class TopicWidget(QWidget):
         # Can be also set by the setter method "set_selected_topics".
         self._selected_topics = selected_topics
 
-        self._current_topic_list = []
         self._topics = {}
         self._tree_items = {}
         self._column_index = {}
         for column_name in self._column_names:
             self._column_index[column_name] = len(self._column_index)
         self.topics_tree_widget.setColumnHidden(self._column_index['_msg_order'], True)
-
-        # self.refresh_topics()
 
         # init and start update timer
         self._timer_refresh_topics = QTimer(self)
@@ -163,49 +156,56 @@ class TopicWidget(QWidget):
                     (self._selected_topics,))
                 return
 
-        if self._current_topic_list != topic_list:
-            self._current_topic_list = topic_list
+        # start new topic dict
+        new_topics = {}
 
-            # start new topic dict
-            new_topics = {}
+        for topic_name, topic_types in topic_list:
+            # if topic is new or has changed its type
+            if topic_name not in self._topics or \
+                    self._topics[topic_name]['type'] != topic_types[0]:
+                # create new TopicInfo
+                if len(topic_types) > 1:
+                    qWarning('rqt_topic: Topic "' + topic_name +
+                             '" has more than one type, choosing the first one of type ' +
+                             topic_types[0])
+                topic_info = TopicInfo(self._node, topic_name, topic_types[0])
+                message_instance = None
+                if topic_info.message_class is not None:
+                    message_instance = topic_info.message_class()
+                # add it to the dict and tree view
+                topic_item = self._recursive_create_widget_items(
+                    self.topics_tree_widget, topic_name, topic_types, message_instance)
+                new_topics[topic_name] = {
+                    'item': topic_item,
+                    'info': topic_info,
+                    'type': topic_types[0],
+                }
+            else:
+                # This topic has been seen before.  Check whether we are the only subscriber;
+                # if so, we set it to be deleted below.  If there are any other publishers or
+                # subscriptions in the system, we continue monitoring it.
 
-            for topic_name, topic_types in topic_list:
-                # if topic is new or has changed its type
-                if topic_name not in self._topics or \
-                        self._topics[topic_name]['type'] != topic_types[0]:
-                    # create new TopicInfo
-                    if len(topic_types) > 1:
-                        qWarning('rqt_topic: Topic "' + topic_name +
-                                 '" has more than one type, choosing the first one of type ' +
-                                 topic_types[0])
-                    topic_info = TopicInfo(self._node, topic_name, topic_types[0])
-                    message_instance = None
-                    if topic_info.message_class is not None:
-                        message_instance = topic_info.message_class()
-                    # add it to the dict and tree view
-                    topic_item = self._recursive_create_widget_items(
-                        self.topics_tree_widget, topic_name, topic_types, message_instance)
-                    new_topics[topic_name] = {
-                        'item': topic_item,
-                        'info': topic_info,
-                        'type': topic_types[0],
-                    }
+                if self._topics[topic_name]['info'].is_monitoring():
+                    pubs_info = self._node.get_publishers_info_by_topic(topic_name)
+                    subs_info = self._node.get_subscriptions_info_by_topic(topic_name)
+                    topic_is_active = len(pubs_info) > 0 or len(subs_info) > 1
                 else:
-                    # if topic has been seen before, copy it to new dict and
-                    # remove it from the old one
+                    topic_is_active = True
+
+                if topic_is_active:
                     new_topics[topic_name] = self._topics[topic_name]
                     del self._topics[topic_name]
 
-            # clean up old topics
-            for topic_name in list(self._topics.keys()):
-                self._topics[topic_name]['info'].stop_monitoring()
-                index = self.topics_tree_widget.indexOfTopLevelItem(
-                    self._topics[topic_name]['item'])
-                self.topics_tree_widget.takeTopLevelItem(index)
-                del self._topics[topic_name]
+        # clean up old topics
+        for topic_name in list(self._topics.keys()):
+            self._topics[topic_name]['info'].stop_monitoring()
+            index = self.topics_tree_widget.indexOfTopLevelItem(
+                self._topics[topic_name]['item'])
+            self.topics_tree_widget.takeTopLevelItem(index)
+            del self._topics[topic_name]
 
-            # switch to new topic dict
-            self._topics = new_topics
+        # switch to new topic dict
+        self._topics = new_topics
 
         self._update_topics_data()
 

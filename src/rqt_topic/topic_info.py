@@ -89,6 +89,9 @@ class TopicInfo(ROSTopicHz):
             self._node.destroy_subscription(self._subscriber)
             self._subscriber = None
 
+    def is_monitoring(self):
+        return self.monitoring
+
     def message_callback(self, message):
         self.last_message = message
         super().callback_hz(message, self._topic_name)
