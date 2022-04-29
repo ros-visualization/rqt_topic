@@ -286,7 +286,8 @@ class TopicWidget(QWidget):
                     item_topic_name = topic_name + '[%d]' % i
                     self._recursive_delete_widget_items(self._tree_items[item_topic_name])
         elif type(message) == array.array:
-            self._tree_items[topic_name].setText(self._column_index['value'], repr(message.tolist()))
+            self._tree_items[topic_name].setText(self._column_index['value'],
+                                                 repr(message.tolist()))
         else:
             if topic_name in self._tree_items:
                 self._tree_items[topic_name].setText(self._column_index['value'], repr(message))
