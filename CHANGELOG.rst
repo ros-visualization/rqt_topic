@@ -2,6 +2,12 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.0 (2022-05-10)
+------------------
+* Fix the display of array type elements. (`#41 <https://github.com/ros-visualization/rqt_topic/issues/41>`_)
+* Fix removal of topics while they are being monitored. (`#39 <https://github.com/ros-visualization/rqt_topic/issues/39>`_)
+* Contributors: Chris Lalancette
+
 1.2.3 (2022-04-06)
 ------------------
 * Update maintainers to Audrow Nash (`#37 <https://github.com/ros-visualization/rqt_topic/issues/37>`_)
