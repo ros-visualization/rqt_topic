@@ -30,8 +30,8 @@
 
 from python_qt_binding.QtCore import qWarning
 import rclpy.serialization
-from ros2topic.verb.hz import ROSTopicHz
 from ros2topic.verb.bw import ROSTopicBandwidth
+from ros2topic.verb.hz import ROSTopicHz
 from rqt_py_common.message_helpers import get_message_class
 
 
