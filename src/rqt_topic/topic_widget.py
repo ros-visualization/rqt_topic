@@ -217,9 +217,9 @@ class TopicWidget(QWidget):
                 # If ROSTopicHz.get_hz is called too frequently, it may return None because it does
                 # not have valid statistics
                 rate = None
-                hz_result = topic_info.get_hz(topic_info._topic_name)
+                hz_result = topic_info.get_hz()
                 if hz_result is None:
-                    last_valid_time = topic_info.get_last_printed_tn(topic_info._topic_name)
+                    last_valid_time = topic_info.get_last_printed_tn()
                     current_rostime = topic_info._clock.now().nanoseconds
                     if last_valid_time + self._topic_timeout * 1e9 > current_rostime:
                         # If the last time this was valid was less than the topic timeout param
@@ -231,17 +231,15 @@ class TopicWidget(QWidget):
                 rate_text = '%1.2f' % rate if rate is not None else 'unknown'
 
                 # update bandwidth
-                # TODO (brawner) Currently unsupported
-                bandwidth_text = 'unknown'
-                # bytes_per_s, _, _, _ = topic_info.get_bw()
-                # if bytes_per_s is None:
-                #     bandwidth_text = 'unknown'
-                # elif bytes_per_s < 1000:
-                #     bandwidth_text = '%.2fB/s' % bytes_per_s
-                # elif bytes_per_s < 1000000:
-                #     bandwidth_text = '%.2fKB/s' % (bytes_per_s / 1000.)
-                # else:
-                #     bandwidth_text = '%.2fMB/s' % (bytes_per_s / 1000000.)
+                bytes_per_s, _, _, _, _ = topic_info.get_bw()
+                if bytes_per_s is None:
+                    bandwidth_text = 'unknown'
+                elif bytes_per_s < 1000:
+                    bandwidth_text = '%.2fB/s' % bytes_per_s
+                elif bytes_per_s < 1000000:
+                    bandwidth_text = '%.2fKB/s' % (bytes_per_s / 1000.)
+                else:
+                    bandwidth_text = '%.2fMB/s' % (bytes_per_s / 1000000.)
 
                 # update values
                 value_text = ''
@@ -249,13 +247,10 @@ class TopicWidget(QWidget):
 
             else:
                 rate_text = ''
-                # bytes_per_s = None
                 bandwidth_text = ''
                 value_text = 'not monitored' if topic_info.error is None else topic_info.error
 
             self._tree_items[topic_info._topic_name].setText(self._column_index['rate'], rate_text)
-            # self._tree_items[topic_info._topic_name].setData(
-            #    self._column_index['bandwidth'], Qt.UserRole, bytes_per_s)
             self._tree_items[topic_info._topic_name].setText(
                 self._column_index['bandwidth'], bandwidth_text)
             self._tree_items[topic_info._topic_name].setText(
