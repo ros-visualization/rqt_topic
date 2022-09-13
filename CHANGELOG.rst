@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.6.0 (2022-09-13)
+------------------
+* Implement bandwidth monitoring (`#40 <https://github.com/ros-visualization/rqt_topic/issues/40>`_)
+* Contributors: Audrow Nash, Chris Lalancette, Jacob Perron
+
 1.3.0 (2022-05-10)
 ------------------
 * Fix the display of array type elements. (`#41 <https://github.com/ros-visualization/rqt_topic/issues/41>`_)
