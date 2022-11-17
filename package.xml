@@ -3,7 +3,7 @@
   <version>1.6.0</version>
   <description>rqt_topic provides a GUI plugin for displaying debug information about ROS topics including publishers, subscribers, publishing rate, and ROS Messages.</description>
 
-  <maintainer email="audrow@openrobotics.org">Audrow Nash</maintainer>
+  <maintainer email="brandon@openrobotics.org">Brandon Ong</maintainer>
 
   <license>BSD</license>
 
@@ -14,6 +14,7 @@
   <url type="repository">https://github.com/ros-visualization/rqt_topic</url>
   <url type="bugtracker">https://github.com/ros-visualization/rqt_topic/issues</url>
 
+  <author email="audrow@openrobotics.org">Audrow Nash</author>
   <author>Dirk Thomas</author>
   <author>Dorian Scholz</author>
   <author email="scott@openrobotics.org">Scott K Logan</author>
