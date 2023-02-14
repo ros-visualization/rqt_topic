@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.1 (2023-02-14)
+------------------
 * [rolling] Update maintainers - 2022-11-07 (`#43 <https://github.com/ros-visualization/rqt_topic/issues/43>`_)
 * Contributors: Audrow Nash
 
