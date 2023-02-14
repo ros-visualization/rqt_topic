@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [rolling] Update maintainers - 2022-11-07 (`#43 <https://github.com/ros-visualization/rqt_topic/issues/43>`_)
+* Contributors: Audrow Nash
+
 1.6.0 (2022-09-13)
 ------------------
 * Implement bandwidth monitoring (`#40 <https://github.com/ros-visualization/rqt_topic/issues/40>`_)
