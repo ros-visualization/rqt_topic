@@ -30,6 +30,8 @@
 
 import sys
 
+# setattr(sys, 'SELECT_QT_BINDING', 'pyside')
+
 from rqt_gui.main import Main
 
 
