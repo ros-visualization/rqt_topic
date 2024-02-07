@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.7.1 (2024-02-07)
+------------------
 * Add explicit python3-pytest dependency. (`#48 <https://github.com/ros-visualization/rqt_topic/issues/48>`_)
 * Contributors: Chris Lalancette
 
