@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 
 from python_qt_binding.QtGui import QColor
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, validator
 import re
 
 TOPIC_RE = re.compile(r'^(\/([a-zA-Z0-9_]+))+$')
@@ -25,12 +25,12 @@ class MessageModel(BaseModel):
             return ""
         return str(self.content)
 
-    @field_validator('topic')
+    @validator('topic')
     def validate_topic(cls, value):
         assert TOPIC_RE.match(value) is not None, f'Given topic is not valid: {value}'
         return value
 
-    @field_validator('timestamp')
+    @validator('timestamp')
     def validate_timestamp(cls, value):
         return value
 

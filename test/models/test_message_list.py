@@ -21,7 +21,10 @@ def message_list_proxy(message_list):
     )
 
 
-def test_message_list_model(message_list, qtmodeltester):
+def test_message_list_model(
+    message_list,
+    # qtmodeltester
+):
     # qtmodeltester.check(message_list)
 
     timestamp_str = message_list.data(message_list.index(0, 0), role=Qt.DisplayRole)
@@ -59,7 +62,10 @@ def test_message_list_model(message_list, qtmodeltester):
     )
 
 
-def test_message_list_proxy(message_list_proxy, qtmodeltester):
+def test_message_list_proxy(
+    message_list_proxy,
+    # qtmodeltester
+):
     # qtmodeltester.check(message_list_proxy)
 
     timestamp_str = message_list_proxy.data(

@@ -30,7 +30,10 @@ def topic_list_proxy(topic_list):
     )
 
 
-def test_topic_list_model(topic_list, qtmodeltester):
+def test_topic_list_model(
+    topic_list,
+    # qtmodeltester
+):
     # qtmodeltester.check(topic_list)
 
     # Check model indexes
@@ -55,7 +58,10 @@ def test_topic_list_model(topic_list, qtmodeltester):
     assert last_row.data() == '14.00 B/s'
 
 
-def test_topic_list_proxy(topic_list_proxy, qtmodeltester):
+def test_topic_list_proxy(
+    topic_list_proxy,
+    # qtmodeltester
+):
     # qtmodeltester.check(topic_list_proxy)
 
     # Check model indexes

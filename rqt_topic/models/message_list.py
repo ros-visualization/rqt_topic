@@ -22,7 +22,7 @@ class MessageListModel(QAbstractTableModel):
     def __init__(self, *args, messages=None, **kwargs):
         super(MessageListModel, self).__init__(*args, **kwargs)
         self.messages = messages or []
-        self.columns = list(MessageModel.model_fields.keys())
+        self.columns = list(MessageModel.__fields__.keys())
         self.highlight_new_messages = True
 
         self.signals = MessageListSignals()

@@ -70,7 +70,10 @@ def test_basic_message_detail_model():
     assert nsec_index.data() == '5'
 
 
-def test_message_detail_model(message_detail, qtmodeltester):
+def test_message_detail_model(
+    message_detail,
+    # qtmodeltester
+):
     # qtmodeltester.check(message_detail)
 
     assert (
@@ -92,7 +95,7 @@ def test_message_detail_model(message_detail, qtmodeltester):
 
 def test_message_detail_proxy_model(
     message_detail_proxy,
-    qtmodeltester,
+    # qtmodeltester,
 ):
     message_detail_proxy.sourceModel().update(TEST_MSG_DICT)
     # qtmodeltester.check(message_detail_proxy)
