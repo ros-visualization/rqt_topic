@@ -1,0 +1,2 @@
+pydantic>=2.5.3
+pytest-qt>=4.3.1
