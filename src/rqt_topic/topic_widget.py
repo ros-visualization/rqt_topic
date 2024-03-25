@@ -280,7 +280,7 @@ class TopicWidget(QWidget):
                 for i in range(len(message), self._tree_items[topic_name].childCount()):
                     item_topic_name = topic_name + '[%d]' % i
                     self._recursive_delete_widget_items(self._tree_items[item_topic_name])
-        elif type(message) == array.array:
+        elif isinstance(message, array.array):
             self._tree_items[topic_name].setText(self._column_index['value'],
                                                  repr(message.tolist()))
         else:
