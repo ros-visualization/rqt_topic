@@ -33,7 +33,7 @@ import rclpy.serialization
 from ros2topic.verb.bw import ROSTopicBandwidth
 from ros2topic.verb.hz import ROSTopicHz
 from rqt_py_common.message_helpers import get_message_class
-
+from rclpy.qos_overriding_options import QoSOverridingOptions, QosCallbackResult
 
 class TopicInfo:
 
@@ -74,7 +74,15 @@ class TopicInfo:
             self.monitoring = True
             self._subscriber = self._node.create_subscription(
                 self.message_class, self._topic_name, self.message_callback,
-                qos_profile=10, raw=True)
+                qos_profile=10, raw=True,
+                qos_overriding_options=QoSOverridingOptions.with_default_policies(
+                    callback=self.qos_callback,
+                ))
+
+    def qos_callback(self, qos):
+        result = QosCallbackResult()
+        result.successful = True
+        return result
 
     def stop_monitoring(self):
         self.monitoring = False
