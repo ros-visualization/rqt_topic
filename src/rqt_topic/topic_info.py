@@ -29,6 +29,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from python_qt_binding.QtCore import qWarning
+from rclpy.qos import QoSPolicyKind
+from rclpy.qos_overriding_options import QosCallbackResult, QoSOverridingOptions
 import rclpy.serialization
 from ros2topic.verb.bw import ROSTopicBandwidth
 from ros2topic.verb.hz import ROSTopicHz
@@ -72,9 +74,22 @@ class TopicInfo:
     def start_monitoring(self):
         if self.message_class is not None:
             self.monitoring = True
+            qos_options = QoSOverridingOptions(
+                policy_kinds=(
+                    QoSPolicyKind.HISTORY,
+                    QoSPolicyKind.DEPTH,
+                    QoSPolicyKind.RELIABILITY,
+                    QoSPolicyKind.DURABILITY),
+                callback=self.qos_callback)
             self._subscriber = self._node.create_subscription(
                 self.message_class, self._topic_name, self.message_callback,
-                qos_profile=10, raw=True)
+                qos_profile=10, raw=True,
+                qos_overriding_options=qos_options)
+
+    def qos_callback(self, qos):
+        result = QosCallbackResult()
+        result.successful = True
+        return result
 
     def stop_monitoring(self):
         self.monitoring = False
