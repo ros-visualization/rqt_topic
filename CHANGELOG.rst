@@ -2,8 +2,8 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.14 (2025-04-10)
+-------------------
 * Import setup from setuptools instead of distutils.core (`#44 <https://github.com/ros-visualization/rqt_topic/issues/44>`_)
 * Contributors: Arne Hitzmann, David V. Lu!!, Matthijs van der Burgh
 
