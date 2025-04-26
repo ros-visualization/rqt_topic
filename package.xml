@@ -4,7 +4,7 @@
   schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>rqt_topic</name>
-  <version>0.4.14</version>
+  <version>0.4.15</version>
   <description>rqt_topic provides a GUI plugin for displaying debug information about ROS topics including publishers, subscribers, publishing rate, and ROS Messages.</description>
   <maintainer email="scholz@sim.tu-darmstadt.de">Dorian Scholz</maintainer>
   <maintainer email="scott@openrobotics.org">Scott K Logan</maintainer>
