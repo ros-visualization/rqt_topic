@@ -2,6 +2,9 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.9.0 (2025-04-28)
+------------------
+
 1.8.1 (2024-12-06)
 ------------------
 * Override subscriber qos (`#51 <https://github.com/ros-visualization/rqt_topic//issues/51>`_)
