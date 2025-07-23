@@ -2,6 +2,23 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.9.0 (2025-04-28)
+------------------
+
+1.8.1 (2024-12-06)
+------------------
+* Override subscriber qos (`#51 <https://github.com/ros-visualization/rqt_topic//issues/51>`_)
+* Remove CODEOWNERS (`#52 <https://github.com/ros-visualization/rqt_topic//issues/52>`_)
+* Contributors: Alejandro Hernández Cordero
+
+1.8.0 (2024-04-26)
+------------------
+
+1.7.2 (2024-03-28)
+------------------
+* Small fix for modern flake8. (`#50 <https://github.com/ros-visualization/rqt_topic/issues/50>`_)
+* Contributors: Chris Lalancette
+
 1.7.1 (2024-02-07)
 ------------------
 * Add explicit python3-pytest dependency. (`#48 <https://github.com/ros-visualization/rqt_topic/issues/48>`_)

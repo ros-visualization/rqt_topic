@@ -3,7 +3,7 @@ from setuptools import setup
 package_name = "rqt_topic"
 setup(
     name=package_name,
-    version='1.7.1',
+    version='1.9.0',
     package_dir={'': '.'},
     packages=[
         package_name,
@@ -26,7 +26,6 @@ setup(
     keywords=["ROS"],
     classifiers=[
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
         "Topic :: Software Development",
     ],
@@ -34,8 +33,12 @@ setup(
         "rqt_topic provides a GUI plugin for displaying debug information about ROS topics "
         "including publishers, subscribers, publishing rate, and ROS Messages."
     ),
-    license="BSD",
-    tests_require=["pytest"],
+    license='BSD',
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         "console_scripts": [
             "rqt_topic = " + package_name + ".main:main",
