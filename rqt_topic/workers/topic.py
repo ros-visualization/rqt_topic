@@ -4,6 +4,8 @@ import threading
 
 from python_qt_binding.QtCore import QRunnable, Slot, QObject, Signal
 
+from rclpy.qos import QoSPolicyKind
+from rclpy.qos_overriding_options import QosCallbackResult, QoSOverridingOptions
 from rclpy.node import Node
 import rclpy.serialization
 from ros2topic.verb.bw import ROSTopicBandwidth
@@ -85,9 +87,23 @@ class TopicWorker(QRunnable):
             )
             self.executor_thread.start()
 
+        qos_options = QoSOverridingOptions(
+            policy_kinds=(
+                QoSPolicyKind.HISTORY,
+                QoSPolicyKind.DEPTH,
+                QoSPolicyKind.RELIABILITY,
+                QoSPolicyKind.DURABILITY),
+            callback=self.qos_callback)
+
         self.subscriber = self.node.create_subscription(
-            self.message_class, self.topic.name, self.impl, qos_profile=10, raw=True
+            self.message_class, self.topic.name, self.impl, qos_profile=10, raw=True,
+            qos_overriding_options=qos_options
         )
+
+    def qos_callback(self, qos):
+        result = QosCallbackResult()
+        result.successful = True
+        return result
 
     @Slot()
     def stop(self):
