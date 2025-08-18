@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Open Source Robotics Foundation
+# Copyright 2025 Open Source Robotics Foundation, Inc.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -11,7 +11,7 @@
 #     copyright notice, this list of conditions and the following
 #     disclaimer in the documentation and/or other materials provided
 #     with the distribution.
-#   * Neither the name of the TU Darmstadt nor the names of its
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
 #     contributors may be used to endorse or promote products derived
 #     from this software without specific prior written permission.
 #
@@ -28,15 +28,37 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import sys
+import pytest
+from datetime import datetime
 
-from rqt_gui.main import Main
+from pydantic import ValidationError
 
-
-def main():
-    main = Main()
-    sys.exit(main.main(sys.argv, standalone='rqt_topic.topic.Topic'))
+from rqt_topic.models.message import generate_test_msgs, MessageModel
 
 
-if __name__ == '__main__':
-    main()
+def test_message_model_happy_path():
+    test_msgs = generate_test_msgs(10)
+
+    for index, msg in enumerate(test_msgs):
+        assert msg.topic == f'/{index}/test_topic'
+        assert msg.message_type == 'test_msgs/BasicTypes'
+        assert isinstance(msg.timestamp, datetime)
+        assert msg.content == {f'test_{index}_key': f'value_{index}'}
+
+
+def test_message_model_incomplete_inputs():
+    test_msg = None
+    with pytest.raises(ValidationError) as error:
+        test_msg = MessageModel(
+            topic='/invalid@$_topic@$@^', message_type='test_msgs/BasicTypes'
+        )
+    assert 'Given topic is not valid: /invalid@$_topic@$@^' in str(error.value)
+
+    with pytest.raises(ValidationError) as error:
+        test_msg = MessageModel(
+            topic='/test_topic',
+            message_type='test_msgs/BasicTypes',
+            timestamp='invalid timestamp',
+        )
+    assert 'invalid datetime format' in str(error.value)
+    assert test_msg is None
