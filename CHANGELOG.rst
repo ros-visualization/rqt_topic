@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.9.1 (2025-07-30)
+------------------
+* fix setuptools deprecations (`#57 <https://github.com/ros-visualization/rqt_topic/issues/57>`_)
+* Contributors: mosfet80
+
 1.9.0 (2025-04-28)
 ------------------
 
