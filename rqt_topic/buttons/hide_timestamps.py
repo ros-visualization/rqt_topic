@@ -34,6 +34,7 @@ from python_qt_binding.QtWidgets import QAction
 # TODO(evan.flynn): it'd be better to make a generic "hideColumn" feature directly
 # in the QAbstractTableModel. This is an acceptable work around for now.
 class HideTimestamps(QAction):
+
     def __init__(self, style, name: str = 'Hide timestamps'):
         super(HideTimestamps, self).__init__(name)
 

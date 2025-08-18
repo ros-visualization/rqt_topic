@@ -32,10 +32,10 @@ import re
 
 from python_qt_binding.QtCore import (
     QAbstractTableModel,
+    QModelIndex,
+    QObject,
     QSortFilterProxyModel,
     Qt,
-    QObject,
-    QModelIndex,
     Signal,
     Slot,
 )
@@ -49,6 +49,7 @@ class MessageListSignals(QObject):
 
 
 class MessageListModel(QAbstractTableModel):
+
     def __init__(self, *args, messages=None, **kwargs):
         super(MessageListModel, self).__init__(*args, **kwargs)
         self.messages = messages or []
@@ -62,8 +63,9 @@ class MessageListModel(QAbstractTableModel):
 
     def data(self, index, role):
         """
-        Called for every cell in the table, returns different things
-        depending on the given role.
+        Call for every cell in the table.
+
+        Returns different things depending on the given role.
         """
         # TODO(evan.flynn): extend this to handle formatting / colors for specific
         # data:
@@ -75,7 +77,7 @@ class MessageListModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             value = getattr(msg, column, None)
             if not value or not msg.topic or not msg.message_type:
-                return ""
+                return ''
             if column == 'timestamp':
                 return msg.timestamp.isoformat()
             return str(value)
@@ -152,7 +154,7 @@ class MessageListProxy(QSortFilterProxyModel):
 
         self.signals.searchForStr.connect(self.update_search_filter)
 
-        self.query_string = ""
+        self.query_string = ''
         self.queryRE = re.compile(r'.*')
 
     @Slot(str)
@@ -176,12 +178,10 @@ class MessageListProxy(QSortFilterProxyModel):
 
         if self.query_string or self.queryRE:
             if any(
-                [
-                    self.matches_query(
-                        str(model.index(sourceRow, column, sourceParent).data())
-                    )
-                    for column in range(len(model.columns))
-                ]
+                self.matches_query(
+                    str(model.index(sourceRow, column, sourceParent).data())
+                )
+                for column in range(len(model.columns))
             ):
                 return True
         return False

@@ -29,19 +29,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from datetime import datetime
+import re
 from typing import List
 
-from python_qt_binding.QtGui import QColor
 from pydantic import BaseModel, ConfigDict, validator
-import re
+from python_qt_binding.QtGui import QColor
 
 TOPIC_RE = re.compile(r'^(\/([a-zA-Z0-9_]+))+$')
 
 
 class MessageModel(BaseModel):
     timestamp: datetime = datetime.now()
-    topic: str = ""
-    message_type: str = ""
+    topic: str = ''
+    message_type: str = ''
     content: dict = {}
 
     # TODO(evan.flynn): implement these later on
@@ -52,7 +52,7 @@ class MessageModel(BaseModel):
 
     def __str__(self):
         if not self.content:
-            return ""
+            return ''
         return str(self.content)
 
     @validator('topic')
@@ -74,8 +74,8 @@ class MessageModel(BaseModel):
 
     def clear(self):
         self.timestamp = datetime.now()
-        self.topic = ""
-        self.message_type = ""
+        self.topic = ''
+        self.message_type = ''
         self.content = {}
 
 

@@ -31,38 +31,38 @@
 import logging
 
 from python_qt_binding.QtCore import (
-    Qt,
     QModelIndex,
-    Slot,
+    Qt,
     QTimer,
+    Slot,
 )
 from python_qt_binding.QtWidgets import (
+    QHBoxLayout,
     QLabel,
     QLineEdit,
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
     QSplitter,
     QToolBar,
+    QVBoxLayout,
+    QWidget,
 )
+
+import rclpy
+
+from rqt_topic.buttons.clear import Clear as ClearAll
+from rqt_topic.buttons.hide_timestamps import HideTimestamps
+from rqt_topic.buttons.resize_columns import ResizeColumns
+from rqt_topic.buttons.toggle_highlight import ToggleHighlight
+from rqt_topic.buttons.toggle_pause import TogglePause
 
 from rqt_topic.models.message import MessageModel
 from rqt_topic.models.message_detail import MessageDetailModel, MessageDetailProxy
 from rqt_topic.models.message_list import MessageListModel, MessageListProxy
-from rqt_topic.models.topic_list import TopicListModel, TopicListProxy
 from rqt_topic.models.topic import TopicModel
+from rqt_topic.models.topic_list import TopicListModel, TopicListProxy
 
 from rqt_topic.views.message_detail import MessageDetailView
 from rqt_topic.views.message_list import MessageListView
 from rqt_topic.views.topic_list import TopicListView
-
-from rqt_topic.buttons.toggle_pause import TogglePause
-from rqt_topic.buttons.clear import Clear as ClearAll
-from rqt_topic.buttons.hide_timestamps import HideTimestamps
-from rqt_topic.buttons.toggle_highlight import ToggleHighlight
-from rqt_topic.buttons.resize_columns import ResizeColumns
-
-import rclpy
 
 log = logging.getLogger('rqt_topic')
 
@@ -71,6 +71,7 @@ QUEUE_SIZE_LIMIT = 1e6
 
 
 class QueueSizeWidget(QWidget):
+
     def __init__(self):
         super().__init__()
         self.label = QLabel('Message list queue size:')
@@ -84,6 +85,7 @@ class QueueSizeWidget(QWidget):
 
 
 class SearchWidget(QWidget):
+
     def __init__(self):
         super(SearchWidget, self).__init__()
 

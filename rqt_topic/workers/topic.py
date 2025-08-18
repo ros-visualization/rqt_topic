@@ -29,21 +29,22 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from datetime import datetime
-from typing import TypeVar
 import threading
+from typing import TypeVar
 
-from python_qt_binding.QtCore import QRunnable, Slot, QObject, Signal
+from python_qt_binding.QtCore import QObject, QRunnable, Signal, Slot
 
+from rclpy.node import Node
 from rclpy.qos import QoSPolicyKind
 from rclpy.qos_overriding_options import QosCallbackResult, QoSOverridingOptions
-from rclpy.node import Node
+
 import rclpy.serialization
 from ros2topic.verb.bw import ROSTopicBandwidth
 from ros2topic.verb.hz import ROSTopicHz
 from rqt_py_common.message_helpers import get_message_class
 
-from rqt_topic.models.topic import TopicModel
 from rqt_topic.models.message import MessageModel
+from rqt_topic.models.topic import TopicModel
 
 MsgType = TypeVar('MsgType')
 
@@ -193,7 +194,7 @@ class TopicWorker(QRunnable):
             self.signals.update_message.emit(self.topic.message)
 
     def recursively_parse_message(
-        self, msg_content: MsgType, content_type_str: str = ""
+        self, msg_content: MsgType, content_type_str: str = ''
     ):
         """
         Parse a given message into a nested dictionary of its fields.
@@ -237,7 +238,7 @@ class TopicWorker(QRunnable):
 
     def extract_array_info(self, type_str):
         """
-        This converts a given array or sequence type string into a human readable string.
+        Convert a given array or sequence type string into a human readable string.
 
         By doing this we avoid storing large arrays and sequences since this tool is not meant for
         that (e.g. image data, pointcloud data, etc.)

@@ -28,10 +28,11 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import pytest
 from datetime import datetime
 
 from pydantic import ValidationError
+
+import pytest
 
 from rqt_topic.models.message import generate_test_msgs, MessageModel
 

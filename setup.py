@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = "rqt_topic"
+package_name = 'rqt_topic'
 setup(
     name=package_name,
     version='2.0.0',
@@ -18,20 +18,20 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name, ['plugin.xml']),
     ],
-    install_requires=["setuptools"],
+    install_requires=['setuptools'],
     zip_safe=True,
-    author="Dorian Scholz",
-    maintainer="Brandon Ong",
-    maintainer_email="brandon@openrobotics.org",
-    keywords=["ROS"],
+    author='Dorian Scholz',
+    maintainer='Brandon Ong',
+    maintainer_email='brandon@openrobotics.org',
+    keywords=['ROS'],
     classifiers=[
-        "Intended Audience :: Developers",
-        "Programming Language :: Python",
-        "Topic :: Software Development",
+        'Intended Audience :: Developers',
+        'Programming Language :: Python',
+        'Topic :: Software Development',
     ],
     description=(
-        "rqt_topic provides a GUI plugin for displaying debug information about ROS topics "
-        "including publishers, subscribers, publishing rate, and ROS Messages."
+        'rqt_topic provides a GUI plugin for displaying debug information about ROS topics '
+        'including publishers, subscribers, publishing rate, and ROS Messages.'
     ),
     license='BSD',
     extras_require={
@@ -40,8 +40,8 @@ setup(
         ],
     },
     entry_points={
-        "console_scripts": [
-            "rqt_topic = " + package_name + ".main:main",
+        'console_scripts': [
+            'rqt_topic = ' + package_name + '.main:main',
         ],
     },
 )

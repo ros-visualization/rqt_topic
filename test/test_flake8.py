@@ -20,5 +20,5 @@ import pytest
 @pytest.mark.linter
 def test_flake8():
     pass
-    # rc = main(argv=[])
-    # assert rc == 0, 'Found errors'
+    rc = main(argv=[])
+    assert rc == 0, 'Found errors'

@@ -29,17 +29,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from __future__ import annotations
-from typing import Any, List, Union
+
 import re
+from typing import Any, List, Union
 
 from python_qt_binding.QtCore import (
-    QObject,
-    Qt,
     QAbstractItemModel,
-    Slot,
-    Signal,
     QModelIndex,
+    QObject,
     QSortFilterProxyModel,
+    Qt,
+    Signal,
+    Slot,
 )
 
 
@@ -125,7 +126,7 @@ class MessageDetailModel(QAbstractItemModel):
         assert len(children) == 1, (
             f'Multiple children below {self.name} with the same field name:\n'
             + '\tfield: {field}\n\tchildren:\n'
-            + "".join([f'\t\t{child.name}: {child.message}\n' for child in children])
+            + ''.join([f'\t\t{child.name}: {child.message}\n' for child in children])
         )
         return children[0]
 
@@ -310,7 +311,7 @@ class MessageDetailProxy(QSortFilterProxyModel):
 
         self.signals.searchForStr.connect(self.update_search_filter)
 
-        self.query_string = ""
+        self.query_string = ''
         self.queryRE = re.compile(r'.*')
 
     @Slot(str)
@@ -329,13 +330,11 @@ class MessageDetailProxy(QSortFilterProxyModel):
 
         # Iterate over every column to check for query
         if any(
-            [
-                # Check if value matches query string (either regex or simple search)
-                self.matches_query(
-                    str(model.index(sourceRow, column, sourceParent).data())
-                )
-                for column in range(len(model.columns))
-            ]
+            # Check if value matches query string (either regex or simple search)
+            self.matches_query(
+                str(model.index(sourceRow, column, sourceParent).data())
+            )
+            for column in range(len(model.columns))
         ):
             return True
         return False

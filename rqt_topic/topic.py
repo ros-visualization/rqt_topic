@@ -36,9 +36,10 @@ from rqt_topic.topic_widget import TopicWidget
 
 
 class Topic(Plugin):
+
     def __init__(self, context):
         super(Topic, self).__init__(context)
-        self.setObjectName("Topic")
+        self.setObjectName('Topic')
 
         self._widget = TopicWidget(context.node, self)
 
