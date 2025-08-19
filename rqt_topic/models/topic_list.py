@@ -33,13 +33,13 @@ from typing import List
 from python_qt_binding.QtCore import (
     QAbstractItemModel,
     QAbstractTableModel,
+    QModelIndex,
     QSortFilterProxyModel,
     Qt,
     Slot,
-    QModelIndex,
 )
 
-from rqt_topic.models.topic import TopicModel, Bandwidth, Frequency
+from rqt_topic.models.topic import Bandwidth, Frequency, TopicModel
 from rqt_topic.workers.topic import TopicWorker
 
 
@@ -65,7 +65,7 @@ class TopicListModel(QAbstractTableModel):
 
     def monitoring(self):
         """Return True if any topics are currently being monitored."""
-        return any([topic.monitor for topic in self.topics])
+        return any(topic.monitor for topic in self.topics)
 
     def monitoring_count(self):
         """Return the number of topics currently being monitored."""
@@ -73,8 +73,7 @@ class TopicListModel(QAbstractTableModel):
 
     def data(self, index, role):
         """
-        Called for every cell in the table, returns different things
-        depending on the given role.
+        Call for every cell in the table, returns different things depending on the given role.
 
         TODO(evan.flynn): extend this to handle formatting / colors for specific
         data:
@@ -91,7 +90,7 @@ class TopicListModel(QAbstractTableModel):
             elif column_name == 'frequency':
                 return data.print_hz()
             elif column_name == 'timestamp':
-                return data.isoformat() if data is not None else ""
+                return data.isoformat() if data is not None else ''
             return str(data)
         # Use this role to set the background color of cells
         elif role == Qt.BackgroundRole:
@@ -108,7 +107,7 @@ class TopicListModel(QAbstractTableModel):
             return Qt.Checked if topic.monitor else Qt.Unchecked
 
     def setData(self, index, value, role):
-        """Called whenever data is changed."""
+        """Call whenever data is changed."""
         assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
         # hack: is there a better way to get the current topic name?
         topic = self.topics[index.row()]

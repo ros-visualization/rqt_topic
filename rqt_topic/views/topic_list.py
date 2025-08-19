@@ -35,6 +35,7 @@ from python_qt_binding.QtWidgets import (
 
 
 class TopicListView(QTableView):
+
     def __init__(self, parent, model):
         super(TopicListView, self).__init__(parent=parent)
 
@@ -58,7 +59,7 @@ class TopicListView(QTableView):
         result = False
         if indexes:
             result = any(
-                [True for index in indexes if index.isValid() if index.data() == topic]
+                True for index in indexes if index.isValid() if index.data() == topic
             )
         return result
 

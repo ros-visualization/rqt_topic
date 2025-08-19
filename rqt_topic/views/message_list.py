@@ -35,6 +35,7 @@ from python_qt_binding.QtWidgets import (
 
 
 class MessageListView(QTableView):
+
     def __init__(self, parent, model):
         super(MessageListView, self).__init__(parent=parent)
 

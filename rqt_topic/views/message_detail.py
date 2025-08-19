@@ -33,6 +33,7 @@ from python_qt_binding.QtWidgets import QTreeView
 
 
 class MessageDetailView(QTreeView):
+
     def __init__(self, parent, model):
         super(MessageDetailView, self).__init__(parent=parent)
 

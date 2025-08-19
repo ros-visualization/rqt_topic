@@ -111,7 +111,7 @@ def test_message_detail_model(
     )
     assert (
         message_detail.data(message_detail.index(0, 1), role=Qt.DisplayRole)
-        == '{\'frame_id\': \'test\', \'timestamp\': {\'sec\': 100, \'nsec\': 5}}'
+        == "{'frame_id': 'test', 'timestamp': {'sec': 100, 'nsec': 5}}"
     )
     assert (
         message_detail.data(message_detail.index(1, 0), role=Qt.DisplayRole)

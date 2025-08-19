@@ -33,9 +33,9 @@ import pytest
 import rclpy
 
 from rqt_topic.models.topic_list import (
+    generate_topic_list,
     TopicListModel,
     TopicListProxy,
-    generate_topic_list,
 )
 
 NUMBER_OF_TOPICS = 15

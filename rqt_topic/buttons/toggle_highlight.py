@@ -32,6 +32,7 @@ from python_qt_binding.QtWidgets import QAction
 
 
 class ToggleHighlight(QAction):
+
     def __init__(self, style, name: str = 'Disable highlighting'):
         super(ToggleHighlight, self).__init__(name)
 

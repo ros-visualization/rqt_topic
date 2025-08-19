@@ -32,6 +32,7 @@ from python_qt_binding.QtWidgets import QAction, QStyle
 
 
 class Clear(QAction):
+
     def __init__(self, style, name: str = 'Clear All'):
         super(Clear, self).__init__(name)
 

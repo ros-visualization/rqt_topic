@@ -28,13 +28,14 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import pytest
 from datetime import datetime
+
+import pytest
 
 from python_qt_binding.QtCore import Qt
 
-from rqt_topic.models.message_list import MessageListModel, MessageListProxy
 from rqt_topic.models.message import generate_test_msgs
+from rqt_topic.models.message_list import MessageListModel, MessageListProxy
 
 
 @pytest.fixture
@@ -79,7 +80,7 @@ def test_message_list_model(
             message_list.index(0, 3),
             role=Qt.DisplayRole,
         )
-        == '{\'test_0_key\': \'value_0\'}'
+        == "{'test_0_key': 'value_0'}"
     )
 
     # Check last topic is also there
@@ -122,7 +123,7 @@ def test_message_list_proxy(
             message_list_proxy.index(0, 3),
             role=Qt.DisplayRole,
         )
-        == '{\'test_0_key\': \'value_0\'}'
+        == "{'test_0_key': 'value_0'}"
     )
 
     # Check last topic is also there

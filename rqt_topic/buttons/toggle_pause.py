@@ -32,6 +32,7 @@ from python_qt_binding.QtWidgets import QAction, QStyle
 
 
 class TogglePause(QAction):
+
     def __init__(self, style, name: str = 'Pause'):
         super(TogglePause, self).__init__(name)
 

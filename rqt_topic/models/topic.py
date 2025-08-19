@@ -29,10 +29,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from datetime import datetime
-from typing import List
+
+from typing import List, Optional
 
 from pydantic import BaseModel
-from typing import Optional
 
 from rqt_topic.models.message import MessageModel
 
@@ -60,7 +60,7 @@ class Bandwidth(BaseModel):
         self.max_size = max_size
 
     def print_bps(self) -> str:
-        bw_str = ""
+        bw_str = ''
         if self.bytes_per_sec is None:
             bw_str = 'unknown'
         elif self.bytes_per_sec < 1000:
@@ -99,8 +99,8 @@ class Frequency(BaseModel):
 
 
 class TopicModel(BaseModel):
-    name: str = ""
-    message_type: str = ""
+    name: str = ''
+    message_type: str = ''
     bandwidth: Bandwidth = Bandwidth()
     frequency: Frequency = Frequency()
     monitor: bool = False
