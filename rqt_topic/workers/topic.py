@@ -35,7 +35,8 @@ from typing import TypeVar
 from python_qt_binding.QtCore import QObject, QRunnable, Signal, Slot
 
 from rclpy.node import Node
-from rclpy.qos import QoSPolicyKind
+from rclpy.qos import QoSDurabilityPolicy, QoSPolicyKind, QoSProfile
+from rclpy.qos import QoSReliabilityPolicy
 from rclpy.qos_overriding_options import QosCallbackResult, QoSOverridingOptions
 
 import rclpy.serialization
@@ -118,6 +119,7 @@ class TopicWorker(QRunnable):
             )
             self.executor_thread.start()
 
+        qos = self.choose_qos()
         qos_options = QoSOverridingOptions(
             policy_kinds=(
                 QoSPolicyKind.HISTORY,
@@ -127,7 +129,7 @@ class TopicWorker(QRunnable):
             callback=self.qos_callback)
 
         self.subscriber = self.node.create_subscription(
-            self.message_class, self.topic.name, self.impl, qos_profile=10, raw=True,
+            self.message_class, self.topic.name, self.impl, qos_profile=qos, raw=True,
             qos_overriding_options=qos_options
         )
 
@@ -261,3 +263,46 @@ class TopicWorker(QRunnable):
                 array_size = '0'
 
         return type_str, array_size
+
+    def choose_qos(self):
+        reliability_reliable_endpoints_count = 0
+        durability_transient_local_endpoints_count = 0
+        qos_profile = QoSProfile(depth=10)
+        pubs_info = self.node.get_publishers_info_by_topic(self.topic.name)
+        publishers_count = len(pubs_info)
+        if publishers_count == 0:
+            return qos_profile
+
+        for info in pubs_info:
+            if (info.qos_profile.reliability == QoSReliabilityPolicy.RELIABLE):
+                reliability_reliable_endpoints_count += 1
+            if (info.qos_profile.durability == QoSDurabilityPolicy.TRANSIENT_LOCAL):
+                durability_transient_local_endpoints_count += 1
+
+        # If all endpoints are reliable, ask for reliable
+        if reliability_reliable_endpoints_count == publishers_count:
+            qos_profile.reliability = QoSReliabilityPolicy.RELIABLE
+        else:
+            if reliability_reliable_endpoints_count > 0:
+                print(
+                    'Some, but not all, publishers are offering '
+                    'QoSReliabilityPolicy.RELIABLE. Falling back to '
+                    'QoSReliabilityPolicy.BEST_EFFORT as it will connect '
+                    'to all publishers'
+                )
+            qos_profile.reliability = QoSReliabilityPolicy.BEST_EFFORT
+
+        # If all endpoints are transient_local, ask for transient_local
+        if durability_transient_local_endpoints_count == publishers_count:
+            qos_profile.durability = QoSDurabilityPolicy.TRANSIENT_LOCAL
+        else:
+            if durability_transient_local_endpoints_count > 0:
+                print(
+                    'Some, but not all, publishers are offering '
+                    'QoSDurabilityPolicy.TRANSIENT_LOCAL. Falling back to '
+                    'QoSDurabilityPolicy.VOLATILE as it will connect '
+                    'to all publishers'
+                )
+            qos_profile.durability = QoSDurabilityPolicy.VOLATILE
+
+        return qos_profile
