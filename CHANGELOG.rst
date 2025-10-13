@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.7.4 (2025-10-13)
+------------------
+* fix setuptools deprecations (backport `#57 <https://github.com/ros-visualization/rqt_topic/issues/57>`_) (`#60 <https://github.com/ros-visualization/rqt_topic/issues/60>`_)
+* Contributors: mergify[bot]
+
 1.7.3 (2024-12-09)
 ------------------
 * Override subscriber qos (backport `#51 <https://github.com/ros-visualization/rqt_topic/issues/51>`_) (`#54 <https://github.com/ros-visualization/rqt_topic/issues/54>`_)
