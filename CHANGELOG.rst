@@ -2,6 +2,12 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2025-10-13)
+------------------
+* Use choose_qos() from ros2 topic echo (`#55 <https://github.com/ros-visualization/rqt_topic/issues/55>`_)
+* Enable flake8 (`#58 <https://github.com/ros-visualization/rqt_topic/issues/58>`_)
+* Contributors: Alejandro Hernández Cordero, Romain Reignier
+
 2.0.0 (2025-08-18)
 ------------------
 * Open source rewrite of rqt_topic (`#47 <https://github.com/ros-visualization/rqt_topic/issues/47>`_)
