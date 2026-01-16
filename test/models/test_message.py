@@ -61,5 +61,5 @@ def test_message_model_incomplete_inputs():
             message_type='test_msgs/BasicTypes',
             timestamp='invalid timestamp',
         )
-    assert 'invalid datetime format' in str(error.value)
+    assert 'validation error for MessageModel\ntimestamp' in str(error.value)
     assert test_msg is None
