@@ -2,6 +2,16 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use choose_qos() from ros2 topic echo (backport `#55 <https://github.com/ros-visualization/rqt_topic/issues/55>`_) (`#63 <https://github.com/ros-visualization/rqt_topic/issues/63>`_)
+  * Use choose_qos() from ros2 topic echo (`#55 <https://github.com/ros-visualization/rqt_topic/issues/55>`_)
+  Co-authored-by: Alejandro Hernandez Cordero <ahcorde@gmail.com>
+  (cherry picked from commit 9e271278ce304f615e9ed7d94655506940cadf88)
+  Co-authored-by: Romain Reignier <romainreignier@users.noreply.github.com>
+  Co-authored-by: Alejandro Hernandez Cordero <ahcorde@gmail.com>
+* Contributors: mergify[bot]
+
 1.7.4 (2025-10-13)
 ------------------
 * fix setuptools deprecations (backport `#57 <https://github.com/ros-visualization/rqt_topic/issues/57>`_) (`#60 <https://github.com/ros-visualization/rqt_topic/issues/60>`_)
