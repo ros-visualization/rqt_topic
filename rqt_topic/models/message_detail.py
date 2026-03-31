@@ -53,7 +53,6 @@ else:
     EditRole = Qt.ItemDataRole.EditRole
 
 
-
 class MessageDetailSignals(QObject):
     updateMsg = Signal(object)
 
