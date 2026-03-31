@@ -28,7 +28,18 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtWidgets import QAction, QStyle
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+
+from python_qt_binding.QtWidgets import QStyle
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    from python_qt_binding.QtWidgets import QAction
+    SP_MediaPause = QStyle.SP_MediaPause
+    SP_MediaPlay = QStyle.SP_MediaPlay
+else:
+    from python_qt_binding.QtGui import QAction
+    SP_MediaPause = QStyle.StandardPixmap.SP_MediaPause
+    SP_MediaPlay = QStyle.StandardPixmap.SP_MediaPlay
 
 
 class TogglePause(QAction):
@@ -39,8 +50,8 @@ class TogglePause(QAction):
         # Style is provided by the widget that uses this button
         self.style = style
 
-        self.pause_icon = self.style.standardIcon(QStyle.SP_MediaPause)
-        self.play_icon = self.style.standardIcon(QStyle.SP_MediaPlay)
+        self.pause_icon = self.style.standardIcon(SP_MediaPause)
+        self.play_icon = self.style.standardIcon(SP_MediaPlay)
 
         self.setIcon(self.pause_icon)
         self.setIconText('Pause')

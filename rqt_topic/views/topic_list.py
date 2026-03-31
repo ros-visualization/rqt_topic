@@ -30,8 +30,17 @@
 
 from python_qt_binding.QtCore import Slot
 from python_qt_binding.QtWidgets import (
-    QTableView,
+    QTableView
 )
+
+from packaging.version import Version  # noqa
+from python_qt_binding import QT_BINDING_VERSION
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    SelectRows = QTableView.SelectRows
+else:
+    from python_qt_binding.QtWidgets import QAbstractItemView
+    SelectRows = QAbstractItemView.SelectionBehavior.SelectRows
 
 
 class TopicListView(QTableView):
@@ -47,7 +56,7 @@ class TopicListView(QTableView):
         self.vertical_header = self.verticalHeader()
         self.horizontal_header.setStretchLastSection(True)
 
-        self.setSelectionBehavior(QTableView.SelectRows)
+        self.setSelectionBehavior(SelectRows)
         self.resizeColumnsToContents()
 
         self.model.dataChanged.connect(self.update_view_data)
