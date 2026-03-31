@@ -30,6 +30,9 @@
 
 import re
 
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+
 from python_qt_binding.QtCore import (
     QAbstractTableModel,
     QModelIndex,
@@ -39,6 +42,17 @@ from python_qt_binding.QtCore import (
     Signal,
     Slot,
 )
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    BackgroundRole = Qt.BackgroundRole
+    DisplayRole = Qt.DisplayRole
+    Horizontal = Qt.Horizontal
+    Vertical = Qt.Vertical
+else:
+    BackgroundRole = Qt.ItemDataRole.BackgroundRole
+    DisplayRole = Qt.ItemDataRole.DisplayRole
+    Horizontal = Qt.Orientation.Horizontal
+    Vertical = Qt.Orientation.Vertical
 
 from rqt_topic.models.message import MessageModel
 
@@ -74,7 +88,7 @@ class MessageListModel(QAbstractTableModel):
         assert self.checkIndex(index)
         row, column = index.row(), self.columns[index.column()]
         msg = self.messages[row]
-        if role == Qt.DisplayRole:
+        if role == DisplayRole:
             value = getattr(msg, column, None)
             if not value or not msg.topic or not msg.message_type:
                 return ''
@@ -82,7 +96,7 @@ class MessageListModel(QAbstractTableModel):
                 return msg.timestamp.isoformat()
             return str(value)
         # Use this role to set the background color of cells
-        elif role == Qt.BackgroundRole:
+        elif role == BackgroundRole:
             return msg.color_from_timestamp() if self.highlight_new_messages else None
 
     def columnCount(self, parent: QModelIndex = QModelIndex()):
@@ -96,10 +110,10 @@ class MessageListModel(QAbstractTableModel):
         return len(self.messages)
 
     def headerData(self, index, orientation, role):
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
+        if role == DisplayRole:
+            if orientation == Horizontal:
                 return self.columns[index]
-            elif orientation == Qt.Vertical:
+            elif orientation == Vertical:
                 return index + 1  # starts at 0, so +1
         return None
 

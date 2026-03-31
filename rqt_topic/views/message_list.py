@@ -33,6 +33,14 @@ from python_qt_binding.QtWidgets import (
     QTableView,
 )
 
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    SelectRows = QTableView.SelectRows
+else:
+    from python_qt_binding.QtWidgets import QAbstractItemView
+    SelectRows = QAbstractItemView.SelectionBehavior.SelectRows
 
 class MessageListView(QTableView):
 
@@ -48,7 +56,7 @@ class MessageListView(QTableView):
         self.vertical_header = self.verticalHeader()
         self.vertical_header.setVisible(False)
 
-        self.setSelectionBehavior(QTableView.SelectRows)
+        self.setSelectionBehavior(SelectRows)
 
         self.scrollToBottom()
 

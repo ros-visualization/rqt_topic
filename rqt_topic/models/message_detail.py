@@ -33,6 +33,8 @@ from __future__ import annotations
 import re
 from typing import Any, List, Union
 
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
 from python_qt_binding.QtCore import (
     QAbstractItemModel,
     QModelIndex,
@@ -42,6 +44,14 @@ from python_qt_binding.QtCore import (
     Signal,
     Slot,
 )
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    DisplayRole = Qt.DisplayRole
+    EditRole = Qt.EditRole
+else:
+    DisplayRole = Qt.ItemDataRole.DisplayRole
+    EditRole = Qt.ItemDataRole.EditRole
+
 
 
 class MessageDetailSignals(QObject):
@@ -150,7 +160,7 @@ class MessageDetailModel(QAbstractItemModel):
         return parent.index(parent.row(), 0)
 
     def data(self, index: QModelIndex, role: int = None):
-        if index.isValid() and role == Qt.DisplayRole:
+        if index.isValid() and role == DisplayRole:
             node = index.internalPointer()
             if index.column() == 0:
                 return str(node.name)
@@ -160,7 +170,7 @@ class MessageDetailModel(QAbstractItemModel):
                 return None
         return None
 
-    def setData(self, index, value: 'MessageDetailModel', role=Qt.EditRole):
+    def setData(self, index, value: 'MessageDetailModel', role=EditRole):
         if index.isValid():
             if index.column() == 0:
                 assert index.row() < len(self.children)
@@ -186,7 +196,7 @@ class MessageDetailModel(QAbstractItemModel):
         return len(node.children)
 
     def headerData(self, section, orientation, role) -> str:
-        if role == Qt.DisplayRole:
+        if role == DisplayRole:
             if section == 0:
                 return 'Field'
             elif section == 1:

@@ -28,7 +28,19 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtWidgets import QAction, QStyle
+
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+from python_qt_binding.QtWidgets import QStyle
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    from python_qt_binding.QtWidgets import QAction
+    SP_DialogResetButton = QStyle.SP_DialogResetButton
+else:
+    from python_qt_binding.QtGui import QAction
+    SP_DialogResetButton = QStyle.StandardPixmap.SP_DialogResetButton
+
+from python_qt_binding.QtWidgets import QStyle
 
 
 class Clear(QAction):
@@ -39,7 +51,7 @@ class Clear(QAction):
         # Style is provided by the widget that uses this button
         self.style = style
 
-        self.clear_icon = self.style.standardIcon(QStyle.SP_DialogResetButton)
+        self.clear_icon = self.style.standardIcon(SP_DialogResetButton)
 
         self.setIcon(self.clear_icon)
         self.setIconText('Clear All')

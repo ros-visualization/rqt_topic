@@ -30,6 +30,8 @@
 
 import logging
 
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
 from python_qt_binding.QtCore import (
     QModelIndex,
     Qt,
@@ -45,6 +47,11 @@ from python_qt_binding.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    Vertical = Qt.Vertical
+else:
+    Vertical = Qt.Orientation.Vertical
 
 import rclpy
 
@@ -168,12 +175,12 @@ class TopicWidget(QWidget):
             parent=self, model=self.message_detail_proxy
         )
 
-        self.top_splitter = QSplitter(Qt.Vertical)
+        self.top_splitter = QSplitter(Vertical)
         self.top_splitter.addWidget(self.topic_list_view)
         self.top_splitter.addWidget(self.message_list_view)
         self.top_splitter.setStretchFactor(1, 1)
 
-        self.bottom_splitter = QSplitter(Qt.Vertical)
+        self.bottom_splitter = QSplitter(Vertical)
         self.bottom_splitter.addWidget(self.top_splitter)
         self.bottom_splitter.addWidget(self.message_detail_view)
         self.bottom_splitter.setStretchFactor(1, 1)

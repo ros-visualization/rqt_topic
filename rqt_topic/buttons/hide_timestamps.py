@@ -28,7 +28,12 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtWidgets import QAction
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    from python_qt_binding.QtWidgets import QAction
+else:
+    from python_qt_binding.QtGui import QAction
 
 
 # TODO(evan.flynn): it'd be better to make a generic "hideColumn" feature directly

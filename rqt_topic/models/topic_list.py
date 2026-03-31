@@ -30,6 +30,9 @@
 
 from typing import List
 
+from packaging.version import Version
+from python_qt_binding import QT_BINDING_VERSION
+
 from python_qt_binding.QtCore import (
     QAbstractItemModel,
     QAbstractTableModel,
@@ -38,6 +41,30 @@ from python_qt_binding.QtCore import (
     Qt,
     Slot,
 )
+
+if Version(QT_BINDING_VERSION) < Version('6.0.0'):
+    BackgroundRole = Qt.BackgroundRole
+    CheckStateRole = Qt.CheckStateRole
+    DisplayRole = Qt.DisplayRole
+    Checked = Qt.Checked
+    Unchecked = Qt.Checked
+    ItemIsSelectable = Qt.ItemIsSelectable
+    ItemIsEnabled = Qt.ItemIsEnabled
+    ItemIsUserCheckable = Qt.ItemIsUserCheckable
+    Horizontal = Qt.Horizontal
+    Vertical = Qt.Vertical
+else:
+    BackgroundRole = Qt.ItemDataRole.BackgroundRole
+    CheckStateRole = Qt.ItemDataRole.CheckStateRole
+    DisplayRole = Qt.ItemDataRole.DisplayRole
+    Checked = Qt.CheckState.Checked
+    Unchecked = Qt.CheckState.Checked
+    ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
+    ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
+    ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
+    Horizontal = Qt.Orientation.Horizontal
+    Vertical = Qt.Orientation.Vertical
+
 
 from rqt_topic.models.topic import Bandwidth, Frequency, TopicModel
 from rqt_topic.workers.topic import TopicWorker
@@ -84,7 +111,7 @@ class TopicListModel(QAbstractTableModel):
         row, column_name = index.row(), self.columns[index.column()]
         topic = self.topics[row]
         data = getattr(topic, column_name, None)
-        if role == Qt.DisplayRole:
+        if role == DisplayRole:
             if column_name == 'bandwidth':
                 return data.print_bps()
             elif column_name == 'frequency':
@@ -93,7 +120,7 @@ class TopicListModel(QAbstractTableModel):
                 return data.isoformat() if data is not None else ''
             return str(data)
         # Use this role to set the background color of cells
-        elif role == Qt.BackgroundRole:
+        elif role == BackgroundRole:
             if not topic.message:
                 return None
             return (
@@ -103,16 +130,16 @@ class TopicListModel(QAbstractTableModel):
             )
 
         # Checkbox in first column for monitoring the topic
-        if role == Qt.CheckStateRole and index.column() == 0:
-            return Qt.Checked if topic.monitor else Qt.Unchecked
+        if role == CheckStateRole and index.column() == 0:
+            return Checked if topic.monitor else Unchecked
 
     def setData(self, index, value, role):
         """Call whenever data is changed."""
         assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
         # hack: is there a better way to get the current topic name?
         topic = self.topics[index.row()]
-        if role == Qt.CheckStateRole:
-            topic.monitor = value == Qt.Checked
+        if role == CheckStateRole:
+            topic.monitor = value == Checked
             if topic.monitor:
                 self.create_topic_worker(topic)
             else:
@@ -144,9 +171,9 @@ class TopicListModel(QAbstractTableModel):
             return None
         assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
         if index.column() == 0:
-            return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsUserCheckable
+            return ItemIsSelectable | ItemIsEnabled | ItemIsUserCheckable
         else:
-            return Qt.ItemIsSelectable | Qt.ItemIsEnabled
+            return ItemIsSelectable | ItemIsEnabled
 
     def columnCount(self, parent: QModelIndex = QModelIndex()):
         if parent.isValid():
@@ -170,10 +197,10 @@ class TopicListModel(QAbstractTableModel):
         return [(topic.name, [topic.message_type]) for topic in self.topics]
 
     def headerData(self, index: int, orientation, role):
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
+        if role == DisplayRole:
+            if orientation == Horizontal:
                 return self.columns[index]
-            elif orientation == Qt.Vertical:
+            elif orientation == Vertical:
                 return index + 1  # starts at 0, so +1
         return None
 
