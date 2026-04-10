@@ -156,7 +156,7 @@ class MessageDetailModel(QAbstractItemModel):
         parent = node.parent_model
         if parent is None or parent.parent_model is None:
             return QModelIndex()
-        return parent.index(parent.row(), 0)
+        return self.createIndex(parent.row(), 0, parent)
 
     def data(self, index: QModelIndex, role: int = None):
         if index.isValid() and role == DisplayRole:
