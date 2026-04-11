@@ -32,10 +32,12 @@ from datetime import datetime
 
 import pytest
 
-from python_qt_binding.QtCore import Qt
-
 from rqt_topic.models.message import generate_test_msgs
-from rqt_topic.models.message_list import MessageListModel, MessageListProxy
+from rqt_topic.models.message_list import (
+    DisplayRole,
+    MessageListModel,
+    MessageListProxy,
+)
 
 
 @pytest.fixture
@@ -58,27 +60,27 @@ def test_message_list_model(
 ):
     # qtmodeltester.check(message_list)
 
-    timestamp_str = message_list.data(message_list.index(0, 0), role=Qt.DisplayRole)
+    timestamp_str = message_list.data(message_list.index(0, 0), role=DisplayRole)
     # Ensure timestamp follows ISO format
     assert datetime.fromisoformat(timestamp_str)
     assert (
         message_list.data(
             message_list.index(0, 1),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == '/0/test_topic'
     )
     assert (
         message_list.data(
             message_list.index(0, 2),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == 'test_msgs/BasicTypes'
     )
     assert (
         message_list.data(
             message_list.index(0, 3),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == "{'test_0_key': 'value_0'}"
     )
@@ -87,7 +89,7 @@ def test_message_list_model(
     assert (
         message_list.data(
             message_list.index(9, 1),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == '/9/test_topic'
     )
@@ -100,28 +102,28 @@ def test_message_list_proxy(
     # qtmodeltester.check(message_list_proxy)
 
     timestamp_str = message_list_proxy.data(
-        message_list_proxy.index(0, 0), role=Qt.DisplayRole
+        message_list_proxy.index(0, 0), role=DisplayRole
     )
     # Ensure timestamp follows ISO format
     assert datetime.fromisoformat(timestamp_str)
     assert (
         message_list_proxy.data(
             message_list_proxy.index(0, 1),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == '/0/test_topic'
     )
     assert (
         message_list_proxy.data(
             message_list_proxy.index(0, 2),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == 'test_msgs/BasicTypes'
     )
     assert (
         message_list_proxy.data(
             message_list_proxy.index(0, 3),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == "{'test_0_key': 'value_0'}"
     )
@@ -130,7 +132,7 @@ def test_message_list_proxy(
     assert (
         message_list_proxy.data(
             message_list_proxy.index(9, 1),
-            role=Qt.DisplayRole,
+            role=DisplayRole,
         )
         == '/9/test_topic'
     )

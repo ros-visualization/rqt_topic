@@ -30,9 +30,11 @@
 
 import pytest
 
-from python_qt_binding.QtCore import Qt
-
-from rqt_topic.models.message_detail import MessageDetailModel, MessageDetailProxy
+from rqt_topic.models.message_detail import (
+    DisplayRole,
+    MessageDetailModel,
+    MessageDetailProxy,
+)
 
 
 TEST_MSG_DICT = {
@@ -107,18 +109,18 @@ def test_message_detail_model(
     # qtmodeltester.check(message_detail)
 
     assert (
-        message_detail.data(message_detail.index(0, 0), role=Qt.DisplayRole) == 'header'
+        message_detail.data(message_detail.index(0, 0), role=DisplayRole) == 'header'
     )
     assert (
-        message_detail.data(message_detail.index(0, 1), role=Qt.DisplayRole)
+        message_detail.data(message_detail.index(0, 1), role=DisplayRole)
         == "{'frame_id': 'test', 'timestamp': {'sec': 100, 'nsec': 5}}"
     )
     assert (
-        message_detail.data(message_detail.index(1, 0), role=Qt.DisplayRole)
+        message_detail.data(message_detail.index(1, 0), role=DisplayRole)
         == 'content'
     )
     assert (
-        message_detail.data(message_detail.index(1, 1), role=Qt.DisplayRole)
+        message_detail.data(message_detail.index(1, 1), role=DisplayRole)
         == 'test_content'
     )
 
