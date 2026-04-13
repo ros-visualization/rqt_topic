@@ -2,6 +2,13 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.0 (2026-04-13)
+------------------
+* Support Qt6 (`#67 <https://github.com/ros-visualization/rqt_topic/issues/67>`_)
+* Add Qt6 compatibility (`#66 <https://github.com/ros-visualization/rqt_topic/issues/66>`_)
+* Tweak expected error in test for Pydantic v2 compat (`#65 <https://github.com/ros-visualization/rqt_topic/issues/65>`_)
+* Contributors: Alejandro Hernández Cordero, Scott K Logan, Shane Loretz
+
 2.0.1 (2025-10-13)
 ------------------
 * Use choose_qos() from ros2 topic echo (`#55 <https://github.com/ros-visualization/rqt_topic/issues/55>`_)
