@@ -2,6 +2,9 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (2026-05-06)
+------------------
+
 2.1.0 (2026-04-13)
 ------------------
 * Support Qt6 (`#67 <https://github.com/ros-visualization/rqt_topic/issues/67>`_)
