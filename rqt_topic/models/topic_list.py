@@ -51,6 +51,7 @@ if Version(QT_BINDING_VERSION) < Version('6.0.0'):
     ItemIsSelectable = Qt.ItemIsSelectable
     ItemIsEnabled = Qt.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemIsUserCheckable
+    NoItemFlags = Qt.NoItemFlags
     Horizontal = Qt.Horizontal
     Vertical = Qt.Vertical
 else:
@@ -65,6 +66,7 @@ else:
     ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
     ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
+    NoItemFlags = Qt.ItemFlag.NoItemFlags
     Horizontal = Qt.Orientation.Horizontal
     Vertical = Qt.Orientation.Vertical
 
@@ -171,7 +173,7 @@ class TopicListModel(QAbstractTableModel):
 
     def flags(self, index):
         if not index.isValid():
-            return None
+            return NoItemFlags
         assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
         if index.column() == 0:
             return ItemIsSelectable | ItemIsEnabled | ItemIsUserCheckable
