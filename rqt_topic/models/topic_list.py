@@ -47,7 +47,7 @@ if Version(QT_BINDING_VERSION) < Version('6.0.0'):
     CheckStateRole = Qt.CheckStateRole
     DisplayRole = Qt.DisplayRole
     Checked = Qt.Checked
-    Unchecked = Qt.Checked
+    Unchecked = Qt.Unchecked
     ItemIsSelectable = Qt.ItemIsSelectable
     ItemIsEnabled = Qt.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemIsUserCheckable
@@ -57,8 +57,11 @@ else:
     BackgroundRole = Qt.ItemDataRole.BackgroundRole
     CheckStateRole = Qt.ItemDataRole.CheckStateRole
     DisplayRole = Qt.ItemDataRole.DisplayRole
-    Checked = Qt.CheckState.Checked
-    Unchecked = Qt.CheckState.Checked
+    # Use the int .value so comparisons in setData() work: PyQt6 passes
+    # the new check state to setData() as an int (e.g. 2), and PyQt6's
+    # strict enums make `2 == Qt.CheckState.Checked` evaluate to False.
+    Checked = Qt.CheckState.Checked.value
+    Unchecked = Qt.CheckState.Unchecked.value
     ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
     ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
