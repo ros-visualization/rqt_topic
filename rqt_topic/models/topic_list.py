@@ -47,21 +47,26 @@ if Version(QT_BINDING_VERSION) < Version('6.0.0'):
     CheckStateRole = Qt.CheckStateRole
     DisplayRole = Qt.DisplayRole
     Checked = Qt.Checked
-    Unchecked = Qt.Checked
+    Unchecked = Qt.Unchecked
     ItemIsSelectable = Qt.ItemIsSelectable
     ItemIsEnabled = Qt.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemIsUserCheckable
+    NoItemFlags = Qt.NoItemFlags
     Horizontal = Qt.Horizontal
     Vertical = Qt.Vertical
 else:
     BackgroundRole = Qt.ItemDataRole.BackgroundRole
     CheckStateRole = Qt.ItemDataRole.CheckStateRole
     DisplayRole = Qt.ItemDataRole.DisplayRole
-    Checked = Qt.CheckState.Checked
-    Unchecked = Qt.CheckState.Checked
+    # Use the int .value so comparisons in setData() work: PyQt6 passes
+    # the new check state to setData() as an int (e.g. 2), and PyQt6's
+    # strict enums make `2 == Qt.CheckState.Checked` evaluate to False.
+    Checked = Qt.CheckState.Checked.value
+    Unchecked = Qt.CheckState.Unchecked.value
     ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
     ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
     ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
+    NoItemFlags = Qt.ItemFlag.NoItemFlags
     Horizontal = Qt.Orientation.Horizontal
     Vertical = Qt.Orientation.Vertical
 
@@ -168,7 +173,7 @@ class TopicListModel(QAbstractTableModel):
 
     def flags(self, index):
         if not index.isValid():
-            return None
+            return NoItemFlags
         assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
         if index.column() == 0:
             return ItemIsSelectable | ItemIsEnabled | ItemIsUserCheckable
