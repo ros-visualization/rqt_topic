@@ -48,9 +48,15 @@ from python_qt_binding.QtCore import (
 if Version(QT_BINDING_VERSION) < Version('6.0.0'):
     DisplayRole = Qt.DisplayRole
     EditRole = Qt.EditRole
+    ItemIsSelectable = Qt.ItemIsSelectable
+    ItemIsEnabled = Qt.ItemIsEnabled
+    NoItemFlags = Qt.NoItemFlags
 else:
     DisplayRole = Qt.ItemDataRole.DisplayRole
     EditRole = Qt.ItemDataRole.EditRole
+    ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
+    ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
+    NoItemFlags = Qt.ItemFlag.NoItemFlags
 
 
 class MessageDetailSignals(QObject):
@@ -233,9 +239,9 @@ class MessageDetailModel(QAbstractItemModel):
 
     def flags(self, index: QModelIndex):
         if not index.isValid():
-            return None
+            return NoItemFlags
         # assert self.checkIndex(index, QAbstractItemModel.CheckIndexOption.IndexIsValid)
-        return Qt.ItemIsSelectable | Qt.ItemIsEnabled
+        return ItemIsSelectable | ItemIsEnabled
 
     def span(self, index: QModelIndex):
         pass
