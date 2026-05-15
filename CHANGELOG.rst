@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.1 (2026-05-06)
+------------------
+* Fixed messages are not displayed (`#69 <https://github.com/ros-visualization/rqt_topic/issues/69>`_)
+* Contributors: Alejandro Hernández Cordero
+
 3.0.0 (2026-05-06)
 ------------------
 
