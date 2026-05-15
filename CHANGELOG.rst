@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2026-05-15)
+------------------
+* Fixed messages are not displayed (backport `#69 <https://github.com/ros-visualization/rqt_topic/issues/69>`_) (`#70 <https://github.com/ros-visualization/rqt_topic/issues/70>`_)
+* Contributors: mergify[bot]
+
 2.1.0 (2026-04-13)
 ------------------
 * Support Qt6 (`#67 <https://github.com/ros-visualization/rqt_topic/issues/67>`_)
