@@ -3,7 +3,7 @@ from setuptools import setup
 package_name = 'rqt_topic'
 setup(
     name=package_name,
-    version='3.0.0',
+    version='3.0.1',
     package_dir={'': '.'},
     packages=[
         package_name,
