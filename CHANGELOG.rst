@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.2 (2026-06-29)
+------------------
+* Fixed assert when clicking in a topic (backport `#71 <https://github.com/ros-visualization/rqt_topic/issues/71>`_) (`#72 <https://github.com/ros-visualization/rqt_topic/issues/72>`_)
+* Contributors: mergify[bot]
+
 2.1.1 (2026-05-15)
 ------------------
 * Fixed messages are not displayed (backport `#69 <https://github.com/ros-visualization/rqt_topic/issues/69>`_) (`#70 <https://github.com/ros-visualization/rqt_topic/issues/70>`_)
