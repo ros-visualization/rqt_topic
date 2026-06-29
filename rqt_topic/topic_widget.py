@@ -294,9 +294,15 @@ class TopicWidget(QWidget):
         # Connect all active topic workers to the message list model
         for topic_name, topic_worker in self.topic_list_model.workers.items():
             # Only connect the signal if it isnt already connected
-            update_message_meta_method = topic_worker.signals.metaObject().method(6)
-            # Assert here in case code changes in the future, adjust method number ^
-            assert update_message_meta_method.name() == 'update_message'
+            meta_object = topic_worker.signals.metaObject()
+            signal_index = meta_object.indexOfSignal('update_message(MessageModel)')
+            if signal_index < 0:
+                # Fall back to scanning methods for the signal by name
+                for i in range(meta_object.methodCount()):
+                    if meta_object.method(i).name() == 'update_message':
+                        signal_index = i
+                        break
+            update_message_meta_method = meta_object.method(signal_index)
             if not topic_worker.signals.isSignalConnected(update_message_meta_method):
                 topic_worker.signals.update_message.connect(self.update_messages)
 
