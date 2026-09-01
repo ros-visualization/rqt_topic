@@ -30,9 +30,6 @@
 
 import re
 
-from packaging.version import Version
-from python_qt_binding import QT_BINDING_VERSION
-
 from python_qt_binding.QtCore import (
     QAbstractTableModel,
     QModelIndex,
@@ -43,18 +40,12 @@ from python_qt_binding.QtCore import (
     Slot,
 )
 
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    BackgroundRole = Qt.BackgroundRole
-    DisplayRole = Qt.DisplayRole
-    Horizontal = Qt.Horizontal
-    Vertical = Qt.Vertical
-else:
-    BackgroundRole = Qt.ItemDataRole.BackgroundRole
-    DisplayRole = Qt.ItemDataRole.DisplayRole
-    Horizontal = Qt.Orientation.Horizontal
-    Vertical = Qt.Orientation.Vertical
-
 from rqt_topic.models.message import MessageModel
+
+BackgroundRole = Qt.ItemDataRole.BackgroundRole
+DisplayRole = Qt.ItemDataRole.DisplayRole
+Horizontal = Qt.Orientation.Horizontal
+Vertical = Qt.Orientation.Vertical
 
 
 class MessageListSignals(QObject):
@@ -65,10 +56,11 @@ class MessageListSignals(QObject):
 class MessageListModel(QAbstractTableModel):
 
     def __init__(self, *args, messages=None, **kwargs):
-        super(MessageListModel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.messages = messages or []
         self.columns = list(MessageModel.__fields__.keys())
         self.highlight_new_messages = True
+        self.queue_size = 100
 
         self.signals = MessageListSignals()
 
@@ -160,7 +152,7 @@ class MessageListProxy(QSortFilterProxyModel):
     """A proxy model to enable sort and filtering of the underlying MessageListModel."""
 
     def __init__(self, model: MessageListModel, parent=None):
-        super(MessageListProxy, self).__init__(parent)
+        super().__init__(parent)
         self.model = model
         self.setSourceModel(self.model)
 

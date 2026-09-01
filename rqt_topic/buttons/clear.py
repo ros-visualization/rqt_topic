@@ -29,24 +29,16 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 
-from packaging.version import Version
-from python_qt_binding import QT_BINDING_VERSION
+from python_qt_binding.QtGui import QAction
 from python_qt_binding.QtWidgets import QStyle
 
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    from python_qt_binding.QtWidgets import QAction
-    SP_DialogResetButton = QStyle.SP_DialogResetButton
-else:
-    from python_qt_binding.QtGui import QAction
-    SP_DialogResetButton = QStyle.StandardPixmap.SP_DialogResetButton
-
-from python_qt_binding.QtWidgets import QStyle
+SP_DialogResetButton = QStyle.StandardPixmap.SP_DialogResetButton
 
 
 class Clear(QAction):
 
     def __init__(self, style, name: str = 'Clear All'):
-        super(Clear, self).__init__(name)
+        super().__init__(name)
 
         # Style is provided by the widget that uses this button
         self.style = style

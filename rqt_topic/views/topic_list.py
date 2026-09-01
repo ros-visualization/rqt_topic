@@ -29,24 +29,15 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from python_qt_binding.QtCore import Slot
-from python_qt_binding.QtWidgets import (
-    QTableView
-)
+from python_qt_binding.QtWidgets import QAbstractItemView, QTableView
 
-from packaging.version import Version  # noqa
-from python_qt_binding import QT_BINDING_VERSION
-
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    SelectRows = QTableView.SelectRows
-else:
-    from python_qt_binding.QtWidgets import QAbstractItemView
-    SelectRows = QAbstractItemView.SelectionBehavior.SelectRows
+SelectRows = QAbstractItemView.SelectionBehavior.SelectRows
 
 
 class TopicListView(QTableView):
 
     def __init__(self, parent, model):
-        super(TopicListView, self).__init__(parent=parent)
+        super().__init__(parent=parent)
 
         self.model = model
         self.setSortingEnabled(True)

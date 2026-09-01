@@ -33,8 +33,6 @@ from __future__ import annotations
 import re
 from typing import Any, List, Union
 
-from packaging.version import Version
-from python_qt_binding import QT_BINDING_VERSION
 from python_qt_binding.QtCore import (
     QAbstractItemModel,
     QModelIndex,
@@ -45,18 +43,11 @@ from python_qt_binding.QtCore import (
     Slot,
 )
 
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    DisplayRole = Qt.DisplayRole
-    EditRole = Qt.EditRole
-    ItemIsSelectable = Qt.ItemIsSelectable
-    ItemIsEnabled = Qt.ItemIsEnabled
-    NoItemFlags = Qt.NoItemFlags
-else:
-    DisplayRole = Qt.ItemDataRole.DisplayRole
-    EditRole = Qt.ItemDataRole.EditRole
-    ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
-    ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
-    NoItemFlags = Qt.ItemFlag.NoItemFlags
+DisplayRole = Qt.ItemDataRole.DisplayRole
+EditRole = Qt.ItemDataRole.EditRole
+ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
+ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
+NoItemFlags = Qt.ItemFlag.NoItemFlags
 
 
 class MessageDetailSignals(QObject):
@@ -67,14 +58,14 @@ class MessageDetailModel(QAbstractItemModel):
     def __init__(
         self,
         name: str = 'message',
-        message: Any = {},
+        message: Any = None,
         parent_model: 'MessageDetailModel' = None,
         *args,
         **kwargs,
     ):
-        super(MessageDetailModel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.name = name
-        self.message = message
+        self.message = message if message is not None else {}
         self.parent_model = parent_model
         self.children: List[MessageDetailModel] = []
 
@@ -318,7 +309,7 @@ class MessageDetailProxy(QSortFilterProxyModel):
         *args,
         **kwargs,
     ):
-        super(MessageDetailProxy, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.setSourceModel(model)
 

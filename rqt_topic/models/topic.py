@@ -32,7 +32,7 @@ from datetime import datetime
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from rqt_topic.models.message import MessageModel
 
@@ -101,15 +101,16 @@ class Frequency(BaseModel):
 class TopicModel(BaseModel):
     name: str = ''
     message_type: str = ''
-    bandwidth: Bandwidth = Bandwidth()
-    frequency: Frequency = Frequency()
+    bandwidth: Bandwidth = Field(default_factory=Bandwidth)
+    frequency: Frequency = Field(default_factory=Frequency)
     monitor: bool = False
 
-    timestamp: datetime = datetime.now()
-    message: MessageModel = MessageModel()
+    timestamp: datetime = Field(default_factory=datetime.now)
+    message: MessageModel = Field(default_factory=MessageModel)
 
     # A topic can have multiple nodes publishing to the same topic
-    source_nodes: Optional[List[str]] = ['node1', 'node2', 'node3']
+    source_nodes: Optional[List[str]] = Field(
+        default_factory=lambda: ['node1', 'node2', 'node3'])
 
     def clear(self):
         self.bandwidth.clear()
