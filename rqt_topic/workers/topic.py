@@ -78,7 +78,7 @@ class TopicWorker(QRunnable):
     """
 
     def __init__(self, window_id: int, topic: TopicModel, *args, **kwargs):
-        super(TopicWorker, self).__init__()
+        super().__init__()
 
         self.window_id = int(window_id)
 
@@ -284,7 +284,7 @@ class TopicWorker(QRunnable):
             qos_profile.reliability = QoSReliabilityPolicy.RELIABLE
         else:
             if reliability_reliable_endpoints_count > 0:
-                print(
+                self.node.get_logger().warning(
                     'Some, but not all, publishers are offering '
                     'QoSReliabilityPolicy.RELIABLE. Falling back to '
                     'QoSReliabilityPolicy.BEST_EFFORT as it will connect '
@@ -297,7 +297,7 @@ class TopicWorker(QRunnable):
             qos_profile.durability = QoSDurabilityPolicy.TRANSIENT_LOCAL
         else:
             if durability_transient_local_endpoints_count > 0:
-                print(
+                self.node.get_logger().warning(
                     'Some, but not all, publishers are offering '
                     'QoSDurabilityPolicy.TRANSIENT_LOCAL. Falling back to '
                     'QoSDurabilityPolicy.VOLATILE as it will connect '

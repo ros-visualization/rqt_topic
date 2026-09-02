@@ -28,10 +28,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import List
-
-from packaging.version import Version
-from python_qt_binding import QT_BINDING_VERSION
+from typing import List, Optional
 
 from python_qt_binding.QtCore import (
     QAbstractItemModel,
@@ -42,46 +39,32 @@ from python_qt_binding.QtCore import (
     Slot,
 )
 
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    BackgroundRole = Qt.BackgroundRole
-    CheckStateRole = Qt.CheckStateRole
-    DisplayRole = Qt.DisplayRole
-    Checked = Qt.Checked
-    Unchecked = Qt.Unchecked
-    ItemIsSelectable = Qt.ItemIsSelectable
-    ItemIsEnabled = Qt.ItemIsEnabled
-    ItemIsUserCheckable = Qt.ItemIsUserCheckable
-    NoItemFlags = Qt.NoItemFlags
-    Horizontal = Qt.Horizontal
-    Vertical = Qt.Vertical
-else:
-    BackgroundRole = Qt.ItemDataRole.BackgroundRole
-    CheckStateRole = Qt.ItemDataRole.CheckStateRole
-    DisplayRole = Qt.ItemDataRole.DisplayRole
-    # Use the int .value so comparisons in setData() work: PyQt6 passes
-    # the new check state to setData() as an int (e.g. 2), and PyQt6's
-    # strict enums make `2 == Qt.CheckState.Checked` evaluate to False.
-    Checked = Qt.CheckState.Checked.value
-    Unchecked = Qt.CheckState.Unchecked.value
-    ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
-    ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
-    ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
-    NoItemFlags = Qt.ItemFlag.NoItemFlags
-    Horizontal = Qt.Orientation.Horizontal
-    Vertical = Qt.Orientation.Vertical
-
-
 from rqt_topic.models.topic import Bandwidth, Frequency, TopicModel
 from rqt_topic.workers.topic import TopicWorker
+
+BackgroundRole = Qt.ItemDataRole.BackgroundRole
+CheckStateRole = Qt.ItemDataRole.CheckStateRole
+DisplayRole = Qt.ItemDataRole.DisplayRole
+# Use the int .value so comparisons in setData() work: PyQt6 passes
+# the new check state to setData() as an int (e.g. 2), and PyQt6's
+# strict enums make `2 == Qt.CheckState.Checked` evaluate to False.
+Checked = Qt.CheckState.Checked.value
+Unchecked = Qt.CheckState.Unchecked.value
+ItemIsSelectable = Qt.ItemFlag.ItemIsSelectable
+ItemIsEnabled = Qt.ItemFlag.ItemIsEnabled
+ItemIsUserCheckable = Qt.ItemFlag.ItemIsUserCheckable
+NoItemFlags = Qt.ItemFlag.NoItemFlags
+Horizontal = Qt.Orientation.Horizontal
+Vertical = Qt.Orientation.Vertical
 
 
 class TopicListModel(QAbstractTableModel):
     def __init__(
-        self, *args, window_id: int = 0, topics: List[TopicModel] = [], **kwargs
+        self, *args, window_id: int = 0, topics: Optional[List[TopicModel]] = None, **kwargs
     ):
-        super(TopicListModel, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.window_id = window_id
-        self.topics = topics
+        self.topics = topics if topics is not None else []
         # Remove all private attributes for user-facing columns
         self.columns = list(TopicModel.__fields__.keys())
         self.row_colors = {}
@@ -263,7 +246,7 @@ class TopicListProxy(QSortFilterProxyModel):
     """A proxy model to enable sort and filtering of the underlying TopicListModel."""
 
     def __init__(self, model: TopicListModel, parent=None):
-        super(TopicListProxy, self).__init__(parent)
+        super().__init__(parent)
         self.setSourceModel(model)
 
     def filterAcceptsRow(self, sourceRow: int, sourceParent: QModelIndex):

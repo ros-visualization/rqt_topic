@@ -32,17 +32,17 @@ from datetime import datetime
 import re
 from typing import List
 
-from pydantic import BaseModel, ConfigDict, validator
+from pydantic import BaseModel, ConfigDict, Field, validator
 from python_qt_binding.QtGui import QColor
 
 TOPIC_RE = re.compile(r'^(\/([a-zA-Z0-9_]+))+$')
 
 
 class MessageModel(BaseModel):
-    timestamp: datetime = datetime.now()
+    timestamp: datetime = Field(default_factory=datetime.now)
     topic: str = ''
     message_type: str = ''
-    content: dict = {}
+    content: dict = Field(default_factory=dict)
 
     # TODO(evan.flynn): implement these later on
     # recorded_timestamp: Optional[str] = 'timestamp this message was recorded'

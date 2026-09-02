@@ -30,8 +30,6 @@
 
 import logging
 
-from packaging.version import Version
-from python_qt_binding import QT_BINDING_VERSION
 from python_qt_binding.QtCore import (
     QModelIndex,
     Qt,
@@ -47,11 +45,6 @@ from python_qt_binding.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-if Version(QT_BINDING_VERSION) < Version('6.0.0'):
-    Vertical = Qt.Vertical
-else:
-    Vertical = Qt.Orientation.Vertical
 
 import rclpy
 
@@ -70,6 +63,8 @@ from rqt_topic.models.topic_list import TopicListModel, TopicListProxy
 from rqt_topic.views.message_detail import MessageDetailView
 from rqt_topic.views.message_list import MessageListView
 from rqt_topic.views.topic_list import TopicListView
+
+Vertical = Qt.Orientation.Vertical
 
 log = logging.getLogger('rqt_topic')
 
@@ -94,7 +89,7 @@ class QueueSizeWidget(QWidget):
 class SearchWidget(QWidget):
 
     def __init__(self):
-        super(SearchWidget, self).__init__()
+        super().__init__()
 
         self.input = QLineEdit()
         self.input.setPlaceholderText('Search')
@@ -112,7 +107,7 @@ class TopicWidget(QWidget):
     """
 
     def __init__(self, node, plugin=None):
-        super(TopicWidget, self).__init__()
+        super().__init__()
         self.node = node
         self._plugin = plugin
 
