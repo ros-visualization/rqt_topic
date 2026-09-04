@@ -2,6 +2,12 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.3 (2026-09-04)
+------------------
+* Removed Qt5 support (`#73 <https://github.com/ros-visualization/rqt_topic/issues/73>`_)
+* Removed Qt5 support
+* Contributors: Alejandro Hernandez Cordero, Michael Carroll
+
 3.0.2 (2026-06-29)
 ------------------
 * Fixed assert when clicking in a topic (`#71 <https://github.com/ros-visualization/rqt_topic/issues/71>`_)
