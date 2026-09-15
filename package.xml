@@ -8,7 +8,7 @@
   <license>BSD</license>
 
   <!-- Some tests are ASL 2.0 -->
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
   <url type="website">http://wiki.ros.org/rqt_topic</url>
   <url type="repository">https://github.com/ros-visualization/rqt_topic</url>
