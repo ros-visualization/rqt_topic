@@ -2,6 +2,11 @@
 Changelog for package rqt_topic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.4 (2026-10-22)
+------------------
+* Use the SPDX identifier Apache-2.0 in license declarations (`#74 <https://github.com/ros-visualization/rqt_topic/issues/74>`_)
+* Contributors: Michael Carroll
+
 3.0.3 (2026-09-04)
 ------------------
 * Removed Qt5 support (`#73 <https://github.com/ros-visualization/rqt_topic/issues/73>`_)
