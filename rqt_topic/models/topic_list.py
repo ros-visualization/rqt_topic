@@ -66,7 +66,7 @@ class TopicListModel(QAbstractTableModel):
         self.window_id = window_id
         self.topics = topics if topics is not None else []
         # Remove all private attributes for user-facing columns
-        self.columns = list(TopicModel.__fields__.keys())
+        self.columns = list(TopicModel.model_fields.keys())
         self.row_colors = {}
         # Monitor is not a column but a checkbox in column 1
         self.columns.remove('monitor')
